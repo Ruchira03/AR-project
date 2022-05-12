@@ -66,6 +66,7 @@ export const signin = (user) => {
     .catch(function (error) {
       if (error.response) {
         // Request made and server responded
+        console.log(error.response)
         console.log(error.response.data);
         toast.error(error.response.data.errorMessage, {
           position: toast.POSITION.TOP_CENTER,
