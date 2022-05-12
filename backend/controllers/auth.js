@@ -46,31 +46,34 @@ exports.signin_email = (req, res, next) => {
       next(new ErrorResponse(err, 500));
     }
     if (user === null) {
-      next(new ErrorResponse("User Not found", 404));
-    }
+      res.status(404).send({ errorMessage: "User Not found" });
+    } else {
+      var passwordIsValid = bcrypt.compareSync(
+        req.body.password,
+        user.password
+      );
 
-    var passwordIsValid = bcrypt.compareSync(req.body.password, user.password);
+      if (!passwordIsValid) {
+        next(new ErrorResponse("Invalid Password!", 401));
+      } else {
+        var token = jwt.sign(
+          {
+            user_id: user.user_id,
+            user_name: user.name,
+            user_email: req.body.email,
+          },
+          process.env.jwtSecretKey,
+          {
+            expiresIn: 86400, // 24 hours
+          }
+        );
 
-    if (!passwordIsValid) {
-      next(new ErrorResponse("Invalid Password!", 401));
-    }
-
-    var token = jwt.sign(
-      {
-        user_id: user.user_id,
-        user_name: user.name,
-        user_email: req.body.email,
-      },
-      process.env.jwtSecretKey,
-      {
-        expiresIn: 86400, // 24 hours
+        res.status(200).send({
+          userData: user,
+          accessToken: token,
+        });
       }
-    );
-
-    res.status(200).send({
-      userData: user,
-      accessToken: token,
-    });
+    }
   });
 };
 

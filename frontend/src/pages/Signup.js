@@ -58,7 +58,7 @@ export default function SignIn() {
     didRedirict: false,
     otp: "",
   });
-  var mob = "91";
+
   const navigate = useNavigate();
   const { name, email, password, mobile_number, didRedirict, otp } = values;
 
@@ -68,8 +68,7 @@ export default function SignIn() {
 
   const onSubmit = (event) => {
     event.preventDefault();
-    mob = mob + mobile_number;
-    setvalues({ ...values, mobile_number: mob, error: false });
+    setvalues({ ...values });
 
     console.log(mobile_number);
     signup({
@@ -184,7 +183,7 @@ export default function SignIn() {
               required
               fullWidth
               type="number"
-              onInput={(e) => (e.target.value = e.target.value.slice(0, 10))}
+              onInput={(e) => (e.target.value = e.target.value.slice(0, 12))}
               onChange={handleChange("mobile_number")}
               id="Mobile-Number"
               label="Mobile-Number"
