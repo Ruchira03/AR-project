@@ -69,10 +69,13 @@ export default function SignIn() {
       .then((res) => {
         if (res.error) {
           toast.warn(res.error, {
-            position: toast.POSITION.BOTTOM_LEFT,
+            position: toast.POSITION.TOP_CENTER,
           });
           setvalues({ ...values, error: res.error });
         } else {
+          toast.success("sucess", {
+            position: toast.POSITION.TOP_CENTER,
+          });
           authenticate(res, () => {
             setvalues({ ...values, didRedirict: true });
             navigate("/userhomepage");
