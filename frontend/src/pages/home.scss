@@ -1,0 +1,163 @@
+.scrollArea {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow-y:auto;
+    overflow-x: hidden;
+  }
+  
+  .container {
+    margin: 0 auto;
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  
+  .content {
+      margin-top:40px;
+      width:100%;
+      height : 80vh;
+      display: flex;
+      justify-content: center;
+      text-align: center;
+  }
+
+
+  .about-company {
+      flex: 30%;
+      margin: 0 auto;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+  }
+  .about-company-title {
+    font-size: 5rem;
+    margin: 25px 0px;
+  }
+  .about-company h2 {
+      text-align: left;
+      margin: 25px 15px;
+  }
+  .about-company p {
+      text-align: justify;
+      margin: 10px 15px;
+  }
+  .title {
+    font-size: 5rem;
+    text-align: center;
+    width: 100%;
+    height : 100%;
+    margin: 0 auto;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex:40%;
+  }
+  .description {
+    margin-top: 80px;  
+    height:80%;  
+    flex:30%;
+    color: rgb(46, 45, 45);
+    display: flex;
+    text-align: justify;
+    align-items: center;
+    padding: 0 60px;
+    background-color: rgba(255, 255, 255, 0.95);
+    border-radius: 100% 43% 41% 100% / 61% 71% 52% 85% ;
+    font-size: 0.9rem;
+    font-weight: 600;
+    line-height: 1.75
+  }
+
+  #minimalistic {
+      color: black;
+  }
+
+  #minimalistic .about-company-title {
+      font-size: 3rem;
+      margin-left: 0px;
+  }
+  
+  #second .description {
+      color: white;
+      background-color: rgb(23, 22, 22);
+      padding: 75px;
+      border-radius: 70% 70% 70% 70% / 70% 70% 70% 70% ;
+  }
+
+  #third .about-company-title {
+      font-size: 2.5rem;
+  }
+
+  #third .description {
+      border-radius: 0px;
+      background: none;
+      color: rgb(255, 153, 0);
+      font-size: 1rem;
+  }
+
+  #fourth .about-company {
+      flex: 5%;
+      text-align: left;
+  }
+
+  #fourth .about-company-title {
+      font-size: 3.5rem;
+      line-height: 1.5;
+      font-weight: 900;
+  }
+
+  #fourth .title {
+      flex: 85%;
+  }
+
+  #fourth .description {
+      flex : 10%;
+      margin-top: 68vh;
+      height: 20vh;
+      box-shadow: 2px 8px 10px -4px rgba(0,0,0,0.9);
+      border-bottom: 10px solid rgb(252, 71, 0);
+      background-color: rgb(255, 110, 52);
+      border-radius: 70% 70% 70% 70% / 70% 70% 70% 70% ;
+  }
+  .content-footer {
+      width : 100%;
+      height : 130vh;
+     display: flex;
+     flex-direction: column;
+  }
+ #thankyou {
+     margin-top: 40vh;
+ }
+
+  .loading {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    background: #171717;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+  
+  .loading-bar-container {
+    width: 100px;
+    height: 32px;
+    background: #272727;
+  }
+  
+  .loading-bar {
+    height: 32px;
+    background: #03B48C;
+  }
+  
