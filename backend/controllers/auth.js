@@ -7,13 +7,13 @@ const ErrorResponse = require("../utils/errorResponse");
 
 exports.signup = (req, res, next) => {
   let userId = nanoid(10);
-  console.log("illi" + req.body.mobile_number);
+  console.log(req.body.mobile_number);
   const user = new User({
     user_id: userId,
     name: req.body.name,
     email: req.body.email,
     password: bcrypt.hashSync(req.body.password, 8),
-    mobile_number:  req.body.mobile_number,
+    mobile_number: req.body.mobile_number,
   });
 
   // console.log(publicKey, privateKey);
@@ -27,6 +27,7 @@ exports.signup = (req, res, next) => {
 
   user.save((err, user) => {
     if (err) {
+      console.log(err);
       next(new ErrorResponse(err, 500));
     } else {
       res.send({
