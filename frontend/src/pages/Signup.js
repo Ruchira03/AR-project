@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SignIn() {
-  const [values, setvalues] = useState({
+  var [values, setvalues] = useState({
     name: "",
     email: "",
     password: "",
@@ -58,6 +58,7 @@ export default function SignIn() {
     didRedirict: false,
     otp: "",
   });
+  var mob = "91";
   const navigate = useNavigate();
   const { name, email, password, mobile_number, didRedirict, otp } = values;
 
@@ -67,8 +68,10 @@ export default function SignIn() {
 
   const onSubmit = (event) => {
     event.preventDefault();
+    mob = mob + mobile_number;
+    setvalues({ ...values, mobile_number: mob, error: false });
 
-    setvalues({ ...values, error: false });
+    console.log(mobile_number);
     signup({
       name,
       email,
@@ -76,7 +79,9 @@ export default function SignIn() {
       mobile_number,
     })
       .then((data) => {
-        if (data.error) {
+        console.log(data);
+
+        if (!data) {
           toast.error(data.error, {
             position: toast.POSITION.TOP_LEFT,
           });
@@ -105,13 +110,10 @@ export default function SignIn() {
       .then((res) => {
         if (res.error) {
           setvalues({ ...values, error: res.error });
+          toast(res.error, { position: toast.TOP_CENTER });
         } else {
           authenticate(res.data, () => {
             setvalues({ ...values, didRedirict: true });
-            navigate("/userhomepage");
-          });
-          toast.success("logedd in sucessfylly", {
-            position: toast.POSITION.TOP_CENTER,
           });
         }
       })
@@ -120,117 +122,128 @@ export default function SignIn() {
       });
   };
 
+  const redir = () => {
+    if (didRedirict) {
+      toast.success("logged in sucessfully", {
+        position: toast.POSITION.TOP_CENTER,
+      });
+      navigate("/userhomepage");
+    }
+  };
   const classes = useStyles();
 
-  
-
   return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <div className={classes.paper}>
-        <ToastContainer />
-        <Avatar className={classes.avatar}></Avatar>
-        <Typography component="h1" variant="h5">
-          Sign in
-        </Typography>
-        <form className={classes.form} noValidate>
-          <TextField
-            onChange={handleChange("name")}
-            autoComplete="name"
-            margin="normal"
-            name="Name"
-            variant="outlined"
-            required
-            fullWidth
-            id="Name"
-            label="Name"
-            autoFocus
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            onChange={handleChange("email")}
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            onChange={handleChange("password")}
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            onChange={handleChange("mobile_number")}
-            id="Mobile-Number"
-            label="Mobile-Number"
-            name="Mobile-Number"
-          />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
-          />
-          <Button
-            type="submit"
-            fullWidth
-            onClick={onSubmit}
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-            Get OTP
-          </Button>
+    <div>
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <div className={classes.paper}>
+          <ToastContainer />
+          <Avatar className={classes.avatar}></Avatar>
+          <Typography component="h1" variant="h5">
+            Sign in
+          </Typography>
+          <form className={classes.form} noValidate>
+            <TextField
+              onChange={handleChange("name")}
+              autoComplete="name"
+              margin="normal"
+              name="Name"
+              variant="outlined"
+              required
+              fullWidth
+              id="Name"
+              label="Name"
+              autoFocus
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              onChange={handleChange("email")}
+              id="email"
+              label="Email Address"
+              name="email"
+              autoComplete="email"
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              onChange={handleChange("password")}
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              type="number"
+              onInput={(e) => (e.target.value = e.target.value.slice(0, 10))}
+              onChange={handleChange("mobile_number")}
+              id="Mobile-Number"
+              label="Mobile-Number"
+              name="Mobile-Number"
+            />
+            <FormControlLabel
+              control={<Checkbox value="remember" color="primary" />}
+              label="Remember me"
+            />
+            <Button
+              type="submit"
+              fullWidth
+              onClick={onSubmit}
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+            >
+              Get OTP
+            </Button>
 
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            onChange={handleChange("otp")}
-            id="otp"
-            label="Enter OTP"
-            name="otp"
-          />
-          <Button
-            type="submit"
-            fullWidth
-            onClick={otpverify}
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-            submit
-          </Button>
-          <Grid container>
-            <Grid item xs>
-              <Link href="#" variant="body2">
-                Forgot password?
-              </Link>
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              onChange={handleChange("otp")}
+              id="otp"
+              label="Enter OTP"
+              name="otp"
+            />
+            <Button
+              type="submit"
+              fullWidth
+              onClick={otpverify}
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+            >
+              submit
+            </Button>
+            <Grid container>
+              <Grid item xs>
+                <Link href="#" variant="body2">
+                  Forgot password?
+                </Link>
+              </Grid>
+              <Grid item>
+                <Link href="/" variant="body2">
+                  {"Already have an account? Sign in"}
+                </Link>
+              </Grid>
             </Grid>
-            <Grid item>
-              <Link href="/" variant="body2">
-                {"Already have an account? Sign in"}
-              </Link>
-            </Grid>
-          </Grid>
-        </form>
-      </div>
-      <Box mt={8}>
-        <Copyright />
-      </Box>
-    </Container>
+          </form>
+        </div>
+        <Box mt={8}>
+          <Copyright />
+        </Box>
+      </Container>
+      <div>{redir()}</div>
+    </div>
   );
 }

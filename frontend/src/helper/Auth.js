@@ -1,16 +1,36 @@
 import { API } from "../backend";
 import axios from "axios";
-
+import { toast } from "react-toastify";
 export const signup = (user) => {
   return axios
     .post(`${API}/auth/signup`, user)
     .then((response) => {
-      if (response.error) {
-      }
+      console.log("response" + response);
       return response;
     })
-    .catch((err) => {
-      alert(err);
+    .catch(function (error) {
+      if (error.response) {
+        // Request made and server responded
+        console.log(error.response.data);
+        toast.error(error.response.data.errorMessage, {
+          position: toast.POSITION.TOP_CENTER,
+        });
+        console.log(error.response.data.errorMessage);
+        console.log("status " + error.response.status);
+        console.log(error.response.headers);
+      } else if (error.request) {
+        // The request was made but no response was received
+        toast.error(error.request, {
+          position: toast.POSITION.TOP_CENTER,
+        });
+        console.log("err request  " + error.request);
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        toast.error(error.message, {
+          position: toast.POSITION.TOP_CENTER,
+        });
+        console.log("Error", error.message);
+      }
     });
 };
 
@@ -43,8 +63,29 @@ export const signin = (user) => {
     .then((response) => {
       return response.data;
     })
-    .catch((err) => {
-      alert(err);
+    .catch(function (error) {
+      if (error.response) {
+        // Request made and server responded
+        console.log(error.response.data);
+        toast.error(error.response.data.errorMessage, {
+          position: toast.POSITION.TOP_CENTER,
+        });
+        console.log(error.response.data.errorMessage);
+        console.log("status " + error.response.status);
+        console.log(error.response.headers);
+      } else if (error.request) {
+        // The request was made but no response was received
+        toast.error(error.request, {
+          position: toast.POSITION.TOP_CENTER,
+        });
+        console.log("err request  " + error.request);
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        toast.error(error.message, {
+          position: toast.POSITION.TOP_CENTER,
+        });
+        console.log("Error", error.message);
+      }
     });
 };
 
@@ -55,15 +96,38 @@ export const otpverification = (user) => {
       console.log(response);
       return response;
     })
-    .catch((err) => {
-      alert(err);
+    .catch(function (error) {
+      if (error.response) {
+        // Request made and server responded
+        console.log(error.response.data);
+        toast.error(error.response.data.errorMessage, {
+          position: toast.POSITION.TOP_CENTER,
+        });
+        console.log(error.response.data.errorMessage);
+        console.log("status " + error.response.status);
+        console.log(error.response.headers);
+      } else if (error.request) {
+        // The request was made but no response was received
+        toast.error(error.request, {
+          position: toast.POSITION.TOP_CENTER,
+        });
+        console.log("err request  " + error.request);
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        toast.error(error.message, {
+          position: toast.POSITION.TOP_CENTER,
+        });
+        console.log("Error", error.message);
+      }
     });
 };
 
 export const authenticate = (data, next) => {
   if (typeof window !== "undefined") {
     localStorage.setItem("jwt", JSON.stringify(data));
-
+    toast.success(data.message, {
+      position: toast.POSITION.TOP_CENTER,
+    });
     next();
   } else {
     console.log("check here in authetinccate in auth.js");
@@ -89,29 +153,4 @@ export const signout = () => {
 
     alert("logout sucessfull !!!");
   }
-};
-export const uploadAdhar = (image) => {
-  const formData = new FormData();
-  formData.append("file", image);
-  console.log(image);
-  const config = {
-    headers: {
-      "x-access-token": JSON.parse(localStorage.getItem("jwt")).access_token,
-      "content-type": "multipart/form-data",
-    },
-  };
-  return axios
-    .put(`${API}/profile/becomeDonor/aadhar/upload`, formData, config)
-    .then((response) => {
-      alert(response.data);
-      console.log(response.data);
-      if (response.error) {
-        alert(response.error);
-      }
-      return response;
-    })
-    .catch((err) => {
-      console.log(err);
-      alert(err);
-    });
 };
