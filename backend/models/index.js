@@ -6,10 +6,9 @@ const db = {};
 db.mongoose = mongoose;
 
 db.user = require("./user");
-// db.chatRoom = require('./chatRooms')
-// db.message = require('./messages')
-// db.donor = require('./donors')
-// db.donor_aadharfile_files = require('./aadharFile')
+db.category = require('./category')
+db.product = require('./product')
+
 
 // db.ROLES = ["user", "admin", "moderator"];
 
