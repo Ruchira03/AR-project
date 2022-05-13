@@ -8,7 +8,7 @@ db.mongoose = mongoose;
 db.user = require("./user");
 db.category = require('./category')
 db.product = require('./product')
-
+db.owner  = require('./owner')
 
 // db.ROLES = ["user", "admin", "moderator"];
 

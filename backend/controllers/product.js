@@ -8,7 +8,7 @@ const storage = getStorage(firebase); // create a reference to storage
 global.XMLHttpRequest = require("xhr2"); // must be used to avoid bug
 
 // Add Image to Storage and return the file path
-exports.addImage = (req, res) => {
+exports.addProduct = (req, res) => {
     try {
 
         const product_id = nanoid(10);
@@ -27,7 +27,7 @@ exports.addImage = (req, res) => {
                 getDownloadURL(imageRef)
                 .then((url) => {
                     console.log(url)
-                    
+
                     const product = new Product({
                         product_id: product_id,
                         name: req.body.name,
@@ -41,7 +41,7 @@ exports.addImage = (req, res) => {
 
                     product.save((err, category) => {
                         if (err) {
-                            return console.log(err)
+                            next(new ErrorResponse(err, 500))
                         }
                         else{
                             res.status(200).send({ message: "Product Added successfully!", category_data : category});  
@@ -57,3 +57,57 @@ exports.addImage = (req, res) => {
     }
 }
 
+exports.getAllProducts = (req, res, next) => {
+    Product.find({}).exec((err, products) => {
+        if(err) {
+            next(new ErrorResponse(err, 500))
+        }
+        else {
+            res.status(200).send({products : products})
+        }
+    })
+}
+
+exports.getProductByCategory  = (req, res ,next) => {
+    Product.find({
+        category_id: req.params.category_id
+    }).exec((err, products) => {
+        if(err) {
+            next(new ErrorResponse(err, 500))
+        }
+        else {
+            res.status(200).send({products : products})
+        }
+    })
+}
+
+exports.editProduct = (req, res, next) => {
+    Product.findOneAndUpdate({ product_id : req.body.product_id},{ name: req.body.name,
+                                                                                desc : req.body.desc,
+                                                                                price : req.body.price,
+                                                                                quantity : req.body.quantity,
+                                                                                category_id : req.body.category_id
+                                                                                },
+                                                                                { upsert: true })
+    .exec((err, result) => {
+        if (err) {
+            next(new ErrorResponse(err, 500))
+            }
+        
+        else {
+            res.status(200).send({result : result});
+        }
+    })
+}
+
+exports.deleteProduct = (req, res, next) => {
+    Product.deleteOne({product_id : req.body.product_id})
+    .exec((err, result) => {
+        if(err)
+            next(new ErrorResponse(err, 500))
+
+        else {
+            res.status(200).send({message : "Product Deleted"})
+        }
+    })
+}

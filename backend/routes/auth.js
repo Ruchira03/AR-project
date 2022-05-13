@@ -22,6 +22,10 @@ router.post("/auth/signin/email", controller.signin_email);
 
 router.post("/auth/signin/mobile", controller.signin_mobile_password);
 
+//owner login
+
+router.post("/auth/owner/signin", controller.ownerSignIn);
+
 module.exports = router;
 
 

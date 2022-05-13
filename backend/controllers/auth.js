@@ -1,5 +1,6 @@
 const db = require("../Models");
 const User = db.user;
+const Owner = db.owner;
 const { nanoid } = require("nanoid");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
@@ -108,3 +109,40 @@ exports.signin_mobile_password = (req, res, next) => {
   });
 };
 
+
+exports.ownerSignIn = (req, res) => {
+  Owner.findOne({ email: req.body.email }).exec((err, owner) => {
+    if (err) {
+      next(new ErrorResponse(err, 500));
+    }
+    if (owner === null) {
+      res.status(404).send({ errorMessage: "Unauthorized!" });
+    } else {
+      var passwordIsValid = bcrypt.compareSync(
+        req.body.password,
+        owner.password
+      );
+
+      if (!passwordIsValid) {
+        next(new ErrorResponse("Invalid Password!", 401));
+      } else {
+        var token = jwt.sign(
+          {
+            user_id: owner.owner_id,
+            user_name: owner.name,
+            user_email: req.body.email,
+          },
+          process.env.jwtSecretKey,
+          {
+            expiresIn: 86400, // 24 hours
+          }
+        );
+
+        res.status(200).send({
+          userData: owner,
+          accessToken: token,
+        });
+      }
+    }
+  });
+}
