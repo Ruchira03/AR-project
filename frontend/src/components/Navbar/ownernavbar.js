@@ -10,19 +10,16 @@ export default function Navbar() {
         <nav>
           <ul>
             <li>
-              <a href="/">About</a>
+              <a href="/ownerhome">Products</a>
             </li>
             <li>
-              <a href="/">Discover</a>
+              <a href="/addproduct">Add Products</a>
             </li>
             <li>
               <a href="/">Categories</a>
             </li>
             <li>
               <a href="/">Logout</a>
-            </li>
-            <li className="btn">
-              <a href="/">Order</a>
             </li>
           </ul>
         </nav>

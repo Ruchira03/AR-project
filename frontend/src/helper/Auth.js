@@ -66,7 +66,40 @@ export const signin = (user) => {
     .catch(function (error) {
       if (error.response) {
         // Request made and server responded
-        console.log(error.response)
+        console.log(error.response);
+        console.log(error.response.data);
+        toast.error(error.response.data.errorMessage, {
+          position: toast.POSITION.TOP_CENTER,
+        });
+        console.log(error.response.data.errorMessage);
+        console.log("status " + error.response.status);
+        console.log(error.response.headers);
+      } else if (error.request) {
+        // The request was made but no response was received
+        toast.error(error.request, {
+          position: toast.POSITION.TOP_CENTER,
+        });
+        console.log("err request  " + error.request);
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        toast.error(error.message, {
+          position: toast.POSITION.TOP_CENTER,
+        });
+        console.log("Error", error.message);
+      }
+    });
+};
+
+export const ownersignin = (user) => {
+  return axios
+    .post(`${API}/auth/signin/email`, user)
+    .then((response) => {
+      return response.data;
+    })
+    .catch(function (error) {
+      if (error.response) {
+        // Request made and server responded
+        console.log(error.response);
         console.log(error.response.data);
         toast.error(error.response.data.errorMessage, {
           position: toast.POSITION.TOP_CENTER,
