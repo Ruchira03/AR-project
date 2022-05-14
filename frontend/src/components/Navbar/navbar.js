@@ -1,5 +1,6 @@
 import React from "react";
 import logo from "../../assets/logo.jpg";
+import { signout } from "../../helper/Auth";
 import "./navbar.scss";
 
 export default function Navbar() {
@@ -10,19 +11,14 @@ export default function Navbar() {
         <nav>
           <ul>
             <li>
-              <a href="/">About</a>
+              <a href="/userhomepage">About</a>
             </li>
             <li>
-              <a href="/">Discover</a>
+              <a href="/products">Discover</a>
             </li>
-            <li>
-              <a href="/">Categories</a>
-            </li>
-            <li>
+
+            <li onClick={signout}>
               <a href="/">Logout</a>
-            </li>
-            <li className="btn">
-              <a href="/">Order</a>
             </li>
           </ul>
         </nav>

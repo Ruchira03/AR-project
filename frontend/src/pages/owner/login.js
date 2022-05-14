@@ -79,7 +79,7 @@ export default function Ownerlogin() {
           });
           authenticate(res, () => {
             setvalues({ ...values, didRedirict: true });
-            navigate("/ownerhomepage");
+            navigate("/ownerhome");
           });
           toast.success("logedd in sucessfylly", {
             position: toast.POSITION.TOP_CENTER,

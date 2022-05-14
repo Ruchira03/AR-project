@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React, useState, useRef } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -15,6 +15,10 @@ import { signup, otpverification, authenticate } from "../helper/Auth";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
+import { Canvas, useFrame, extend, useThree } from "@react-three/fiber";
+import { useGLTF } from "@react-three/drei";
+import "./Login.scss";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 function Copyright() {
   return (
@@ -132,14 +136,14 @@ export default function SignIn() {
   const classes = useStyles();
 
   return (
-    <div>
+    <div className="container">
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <div className={classes.paper}>
           <ToastContainer />
           <Avatar className={classes.avatar}></Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            Sign Up
           </Typography>
           <form className={classes.form} noValidate>
             <TextField
@@ -153,6 +157,7 @@ export default function SignIn() {
               id="Name"
               label="Name"
               autoFocus
+              size="small"
             />
             <TextField
               variant="outlined"
@@ -164,6 +169,7 @@ export default function SignIn() {
               label="Email Address"
               name="email"
               autoComplete="email"
+              size="small"
             />
             <TextField
               variant="outlined"
@@ -176,6 +182,7 @@ export default function SignIn() {
               type="password"
               id="password"
               autoComplete="current-password"
+              size="small"
             />
             <TextField
               variant="outlined"
@@ -188,10 +195,12 @@ export default function SignIn() {
               id="Mobile-Number"
               label="Mobile-Number"
               name="Mobile-Number"
+              size="small"
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
+              size="small"
             />
             <Button
               type="submit"
@@ -200,6 +209,7 @@ export default function SignIn() {
               variant="contained"
               color="primary"
               className={classes.submit}
+              size="small"
             >
               Get OTP
             </Button>
@@ -213,6 +223,7 @@ export default function SignIn() {
               id="otp"
               label="Enter OTP"
               name="otp"
+              size="small"
             />
             <Button
               type="submit"
@@ -221,6 +232,7 @@ export default function SignIn() {
               variant="contained"
               color="primary"
               className={classes.submit}
+              size="small"
             >
               submit
             </Button>
@@ -243,6 +255,47 @@ export default function SignIn() {
         </Box>
       </Container>
       <div>{redir()}</div>
+
+      <Canvas>
+        <Controls />
+        <Lights />
+        <spotLight intensity={0.3} position={[5, 10, 50]} />
+        <mesh position={[30, -15, 0]} scale={10}>
+          <Model />
+        </mesh>
+      </Canvas>
     </div>
   );
 }
+
+const Model = () => {
+  const gltf = useGLTF("/room2/scene.gltf", true);
+  return <primitive object={gltf.scene} dispose={null} />;
+};
+
+const Lights = () => {
+  return (
+    <>
+      {/* Ambient Light illuminates lights for all objects */}
+      <ambientLight intensity={0.3} />
+      {/* Diretion light */}
+      <directionalLight position={[10, 10, 5]} intensity={1} />
+      <directionalLight position={[0, 10, 0]} intensity={1.5} />
+    </>
+  );
+};
+
+extend({ OrbitControls });
+
+const Controls = () => {
+  const {
+    camera,
+    gl: { domElement },
+  } = useThree();
+  // Ref to the controls, so that we can update them on every frame using useFrame
+  const controls = useRef();
+  useFrame((state) => controls.current.update());
+  return (
+    <orbitControls autoRotate ref={controls} args={[camera, domElement]} />
+  );
+};

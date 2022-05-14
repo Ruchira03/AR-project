@@ -1,136 +1,37 @@
 import { API } from "../backend";
 import axios from "axios";
 import { toast } from "react-toastify";
-export const signup = (user) => {
-  return axios
-    .post(`${API}/auth/signup`, user)
-    .then((response) => {
-      console.log("response" + response);
-      return response;
-    })
-    .catch(function (error) {
-      if (error.response) {
-        // Request made and server responded
-        console.log(error.response.data);
-        toast.error(error.response.data.errorMessage, {
-          position: toast.POSITION.TOP_CENTER,
-        });
-        console.log(error.response.data.errorMessage);
-        console.log("status " + error.response.status);
-        console.log(error.response.headers);
-      } else if (error.request) {
-        // The request was made but no response was received
-        toast.error(error.request, {
-          position: toast.POSITION.TOP_CENTER,
-        });
-        console.log("err request  " + error.request);
-      } else {
-        // Something happened in setting up the request that triggered an Error
-        toast.error(error.message, {
-          position: toast.POSITION.TOP_CENTER,
-        });
-        console.log("Error", error.message);
-      }
-    });
-};
 
-export const donarsignup = (aadharno) => {
+export const addproduct = (product, image) => {
+  console.log(product.name);
+  const formData = new FormData();
+  formData.append("name", product.name);
+  formData.append("desc", product.desc);
+  formData.append("price", product.price);
+  formData.append("quantity", product.quantity);
+  formData.append("category_id", product.category_id);
+  formData.append("file", image);
+
   return axios
     .post(
-      `${API}/profile/becomeDonor/aadhar/validate`,
-      { aadharNumber: aadharno },
+      `${API}/product/add`,
+      formData,
+
       {
         headers: {
-          "x-access-token": JSON.parse(localStorage.getItem("jwt"))
-            .access_token,
+          "x-access-token": localStorage.getItem("token"),
+          "content-type": "multipart/form-data",
         },
       }
     )
     .then((response) => {
       console.log(response);
-      if (response.error) {
-      }
-      return response;
-    })
-    .catch((err) => {
-      alert(err);
-    });
-};
-
-export const signin = (user) => {
-  return axios
-    .post(`${API}/auth/signin/email`, user)
-    .then((response) => {
-      return response.data;
+      toast.success(response.data.message, {
+        position: toast.POSITION.TOP_CENTER,
+      });
     })
     .catch(function (error) {
-      if (error.response) {
-        // Request made and server responded
-        console.log(error.response);
-        console.log(error.response.data);
-        toast.error(error.response.data.errorMessage, {
-          position: toast.POSITION.TOP_CENTER,
-        });
-        console.log(error.response.data.errorMessage);
-        console.log("status " + error.response.status);
-        console.log(error.response.headers);
-      } else if (error.request) {
-        // The request was made but no response was received
-        toast.error(error.request, {
-          position: toast.POSITION.TOP_CENTER,
-        });
-        console.log("err request  " + error.request);
-      } else {
-        // Something happened in setting up the request that triggered an Error
-        toast.error(error.message, {
-          position: toast.POSITION.TOP_CENTER,
-        });
-        console.log("Error", error.message);
-      }
-    });
-};
-
-export const ownersignin = (user) => {
-  return axios
-    .post(`${API}/auth/owner/signin`, user)
-    .then((response) => {
-      return response.data;
-    })
-    .catch(function (error) {
-      if (error.response) {
-        // Request made and server responded
-        console.log(error.response);
-        console.log(error.response.data);
-        toast.error(error.response.data.errorMessage, {
-          position: toast.POSITION.TOP_CENTER,
-        });
-        console.log(error.response.data.errorMessage);
-        console.log("status " + error.response.status);
-        console.log(error.response.headers);
-      } else if (error.request) {
-        // The request was made but no response was received
-        toast.error(error.request, {
-          position: toast.POSITION.TOP_CENTER,
-        });
-        console.log("err request  " + error.request);
-      } else {
-        // Something happened in setting up the request that triggered an Error
-        toast.error(error.message, {
-          position: toast.POSITION.TOP_CENTER,
-        });
-        console.log("Error", error.message);
-      }
-    });
-};
-
-export const otpverification = (user) => {
-  return axios
-    .post(`${API}/auth/verify/signup`, user)
-    .then((response) => {
-      console.log(response);
-      return response;
-    })
-    .catch(function (error) {
+      console.log("responded");
       if (error.response) {
         // Request made and server responded
         console.log(error.response.data);
@@ -151,43 +52,132 @@ export const otpverification = (user) => {
         toast.error(error.message, {
           position: toast.POSITION.TOP_CENTER,
         });
-        console.log("Error", error.message);
+        console.log("Error", error);
       }
+      throw error;
     });
 };
 
-export const authenticate = (data, next) => {
-  if (typeof window !== "undefined") {
-    localStorage.setItem("token", data.accessToken);
-    localStorage.setItem("jwt", JSON.stringify(data));
-    toast.success(data.message, {
-      position: toast.POSITION.TOP_CENTER,
+export const getcategory = () => {
+  return axios
+    .get(`${API}/categories`, {
+      headers: {
+        "x-access-token": localStorage.getItem("token"),
+        "content-type": "multipart/form-data",
+      },
+    })
+    .then((response) => {
+      console.log(response.data);
+      localStorage.setItem("categories", JSON.stringify(response.data));
+    })
+    .catch(function (error) {
+      console.log("responded");
+      if (error.response) {
+        // Request made and server responded
+        console.log(error.response.data);
+        toast.error(error.response.data.errorMessage, {
+          position: toast.POSITION.TOP_CENTER,
+        });
+        console.log(error.response.data.errorMessage);
+        console.log("status " + error.response.status);
+        console.log(error.response.headers);
+      } else if (error.request) {
+        // The request was made but no response was received
+        toast.error(error.request, {
+          position: toast.POSITION.TOP_CENTER,
+        });
+        console.log("err request  " + error.request);
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        toast.error(error.message, {
+          position: toast.POSITION.TOP_CENTER,
+        });
+        console.log("Error", error);
+      }
+      throw error;
     });
-    next();
-  } else {
-    console.log("check here in authetinccate in auth.js");
-  }
 };
 
-export const isAuthenticated = () => {
-  if (typeof window == "undefined") {
-    return false;
-  }
-
-  if (localStorage.getItem("jwt")) {
-    return JSON.parse(localStorage.getItem("jwt"));
-  } else {
-    return false;
-  }
+export const getproductlist = () => {
+  return axios
+    .get(`${API}/products`, {
+      headers: {
+        "x-access-token": localStorage.getItem("token"),
+        "content-type": "multipart/form-data",
+      },
+    })
+    .then((response) => {
+      console.log(response.data);
+      localStorage.setItem("products", JSON.stringify(response.data.products));
+    })
+    .catch(function (error) {
+      console.log("responded");
+      if (error.response) {
+        // Request made and server responded
+        console.log(error.response.data);
+        toast.error(error.response.data.errorMessage, {
+          position: toast.POSITION.TOP_CENTER,
+        });
+        console.log(error.response.data.errorMessage);
+        console.log("status " + error.response.status);
+        console.log(error.response.headers);
+      } else if (error.request) {
+        // The request was made but no response was received
+        toast.error(error.request, {
+          position: toast.POSITION.TOP_CENTER,
+        });
+        console.log("err request  " + error.request);
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        toast.error(error.message, {
+          position: toast.POSITION.TOP_CENTER,
+        });
+        console.log("Error", error);
+      }
+      throw error;
+    });
 };
 
-export const signout = () => {
-  console.log("signout called");
-  if (typeof window != "undefined") {
-    localStorage.clear();
+export const deleteProduct = (id) => {
+  return axios
+    .delete(`${API}/product/delete`, {
+      product_id: id,
 
-    toast.error("logout sucessful", {
-      position: toast.POSITION.TOP_CENTER,
+      headers: {
+        "x-access-token": localStorage.getItem("token"),
+        "content-type": "application/json",
+      },
+    })
+    .then((response) => {
+      console.log(response.data.message);
+      toast.success("sucess", {
+        position: toast.POSITION.TOP_CENTER,
+      });
+    })
+    .catch(function (error) {
+      console.log("responded");
+      if (error.response) {
+        // Request made and server responded
+        console.log(error.response.data);
+        toast.error(error.response.data.errorMessage, {
+          position: toast.POSITION.TOP_CENTER,
+        });
+        console.log(error.response.data.errorMessage);
+        console.log("status " + error.response.status);
+        console.log(error.response.headers);
+      } else if (error.request) {
+        // The request was made but no response was received
+        toast.error(error.request, {
+          position: toast.POSITION.TOP_CENTER,
+        });
+        console.log("err request  " + error.request);
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        toast.error(error.message, {
+          position: toast.POSITION.TOP_CENTER,
+        });
+        console.log("Error", error);
+      }
+      throw error;
     });
-  }
 };
