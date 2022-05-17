@@ -16,23 +16,26 @@ global.XMLHttpRequest = require("xhr2"); // must be used to avoid bug
 // Add Image to Storage and return the file path
 exports.addProduct = (req, res, next) => {
   try {
-    console.log(req.file);
     const product_id = nanoid(10);
 
     // Grab the file
-    const file = req.file;
-    const fileName = file.originalname;
+    console.log("request bandide but adralli enu ilaa kano sorry");
+    console.log(req.files);
+    const imagefile = req.files.image;
+    const gltffile = req.files.gltf;
+    const binfile = req.files.bin;
+    const folder = req.files.folder;
+    const fileName = imagefile.originalname;
 
     // Step 1. Create reference for file name in cloud storage
     const imageRef = ref(storage, `${product_id}/${fileName}`);
 
     // Step 2. Upload the file in the bucket storage
-    uploadBytes(imageRef, req.file.buffer).then((snapshot) => {
+    uploadBytes(imageRef, req.files.buffer).then((snapshot) => {
       console.log("Uploaded a blob or file!");
       // Step 3. Grab the public url
       getDownloadURL(imageRef).then((url) => {
         console.log(url);
-        console.log(req.body);
         const product = new Product({
           product_id: product_id,
           name: req.body.name,
@@ -89,6 +92,8 @@ exports.getProductByCategory = (req, res, next) => {
 };
 
 exports.editProduct = (req, res, next) => {
+  console.log("edit product reached");
+  console.log(req.body);
   Product.findOneAndUpdate(
     { product_id: req.body.product_id },
     {

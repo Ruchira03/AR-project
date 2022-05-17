@@ -71,7 +71,7 @@ exports.signin_email = (req, res, next) => {
 
         res.status(200).send({
           userData: user,
-          accessToken: token,
+          access_token: token,
         });
       }
     }
@@ -109,7 +109,6 @@ exports.signin_mobile_password = (req, res, next) => {
   });
 };
 
-
 exports.ownerSignIn = (req, res) => {
   Owner.findOne({ email: req.body.email }).exec((err, owner) => {
     if (err) {
@@ -140,9 +139,9 @@ exports.ownerSignIn = (req, res) => {
 
         res.status(200).send({
           userData: owner,
-          accessToken: token,
+          access_token: token,
         });
       }
     }
   });
-}
+};

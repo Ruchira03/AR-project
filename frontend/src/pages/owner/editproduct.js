@@ -1,6 +1,5 @@
 import { React, useState, useEffect } from "react";
 import logo from "../../assets/logo.jpg";
-import Footer from "../../components/Navbar/footer";
 import "../../components/Navbar/navbar.scss";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
@@ -9,8 +8,9 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
 import Button from "@material-ui/core/Button";
 import { ToastContainer, toast } from "react-toastify";
-import { addproduct, getcategory } from "../../helper/owner";
+import { editproduct, getcategory } from "../../helper/owner";
 import { signout } from "../../helper/Auth";
+import { useNavigate } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -35,22 +35,30 @@ const useStyles = makeStyles((theme) => ({
 export default function Addproduct() {
   useEffect(() => {
     setcategorylist(JSON.parse(localStorage.getItem("categories")));
-  }, []);
+    const val = JSON.parse(localStorage.getItem("edit"));
 
-  const [image, setimage] = useState(null);
-  const [folder, setfolder] = useState(null);
-  const [gltffile, setgltffile] = useState(null);
-  const [binfile, setbinfile] = useState(null);
+    setvalues({
+      ...values,
+      name: val.name,
+      desc: val.desc,
+      price: val.price,
+      quantity: val.quantity,
+      category_id: val.category_id,
+      product_id: val.product_id,
+    });
+  }, []);
+  const navigate = useNavigate();
+  const [image, setimage] = useState();
   const [values, setvalues] = useState({
     name: "",
     desc: "",
     price: "",
     quantity: "",
     category_id: "",
+    product_id: "",
   });
-  const [selectedcat, setselectedcat] = useState("chair");
   const [categorylist, setcategorylist] = useState([]);
-  const { name, desc, price, quantity, category_id } = values;
+  const { name, desc, price, quantity, category_id, product_id } = values;
 
   const handleChange = (name) => (event) => {
     setvalues({ ...values, [name]: event.target.value });
@@ -58,21 +66,14 @@ export default function Addproduct() {
 
   const onSubmit = () => {
     setvalues({ ...values });
-    console.log("naane ne state inda");
-    console.log(image, folder, gltffile, binfile);
-    addproduct(
-      {
-        name,
-        desc,
-        price,
-        quantity,
-        category_id,
-      },
-      image,
-      folder,
-      gltffile,
-      binfile
-    )
+    editproduct({
+      name,
+      desc,
+      price,
+      quantity,
+      category_id,
+      product_id,
+    })
       .then((data) => {
         console.log(data);
         setvalues({
@@ -82,7 +83,8 @@ export default function Addproduct() {
           quantity: "",
           category_id: "",
         });
-        setimage(null);
+        setimage();
+        navigate("/ownerhome");
         if (!data) {
           toast.error(data.error, {
             position: toast.POSITION.TOP_LEFT,
@@ -179,90 +181,8 @@ export default function Addproduct() {
             ))}
           </Select>
 
-          <label htmlFor="contained-button-image">
-            <Button
-              variant="contained"
-              color="primary"
-              component="span"
-              fullWidth
-            >
-              upload image
-              <input
-                className={classes.input}
-                id="contained-button-image"
-                onChange={(event) => {
-                  if (event.target.files && event.target.files[0]) {
-                    setimage(event.target.files[0]);
-                  }
-                }}
-                type="file"
-              />
-            </Button>
-          </label>
-          <label htmlFor="contained-button-gltf">
-            <Button
-              variant="contained"
-              color="primary"
-              component="span"
-              fullWidth
-            >
-              upload gltf
-              <input
-                className={classes.input}
-                id="contained-button-gltf"
-                onChange={(event) => {
-                  if (event.target.files) {
-                    setgltffile(event.target.files[0]);
-                  }
-                }}
-                type="file"
-              />
-            </Button>
-          </label>
-          <label htmlFor="contained-button-bin">
-            <Button
-              variant="contained"
-              color="primary"
-              component="span"
-              fullWidth
-            >
-              upload bin file
-              <input
-                className={classes.input}
-                id="contained-button-bin"
-                onChange={(event) => {
-                  if (event.target.files && event.target.files[0]) {
-                    setbinfile(event.target.files[0]);
-                  }
-                }}
-                type="file"
-              />
-            </Button>
-          </label>
-          <input
-            id="contained-button"
-            className={classes.input}
-            directory=""
-            webkitdirectory=""
-            onChange={(event) => {
-              if (event.target.files) {
-                setfolder(event.target.files);
-              }
-            }}
-            type="file"
-          />
-          <label htmlFor="contained-button">
-            <Button
-              variant="contained"
-              color="primary"
-              component="span"
-              fullWidth
-            >
-              upload asset folder
-            </Button>
-          </label>
           <Button variant="contained" onClick={onSubmit}>
-            Add product
+            submit changes
           </Button>
         </form>
         <div
@@ -271,15 +191,16 @@ export default function Addproduct() {
             marginLeft: "250px",
             width: "450px",
             height: "300px",
+            // backgroundColor: "red",
           }}
         >
-          {image && (
+          {
             <img
               style={{ width: "450px", height: "300px" }}
               id="target"
-              src={URL.createObjectURL(image)}
+              src={JSON.parse(localStorage.getItem("edit")).image_path}
             />
-          )}
+          }
         </div>
       </div>
     </div>

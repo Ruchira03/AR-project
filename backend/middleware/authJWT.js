@@ -4,7 +4,6 @@ const ErrorResponse = require("../utils/errorResponse");
 const User = db.user;
 
 verifyToken = (req, res, next) => {
-  console.log(req.body);
   let token = req.headers["x-access-token"];
   
   if (!token) {

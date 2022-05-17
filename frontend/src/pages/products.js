@@ -2,7 +2,7 @@ import { React, useState, useEffect } from "react";
 import { ToastContainer } from "react-toastify";
 import logo from "../assets/logo.jpg";
 import "../components/Navbar/navbar.scss";
-import { getproductlist } from "../helper/owner";
+import { getproductlist, getcategory } from "../helper/owner";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
@@ -30,6 +30,7 @@ function Products() {
   const [productlist, setproductlist] = useState([]);
   useEffect(() => {
     fetchdetails();
+    getcategory();
   }, []);
   const classes = useStyles();
   //fucntion to fetch all details

@@ -158,7 +158,7 @@ export const otpverification = (user) => {
 
 export const authenticate = (data, next) => {
   if (typeof window !== "undefined") {
-    localStorage.setItem("token", data.accessToken);
+    localStorage.setItem("token", data.access_token);
     localStorage.setItem("jwt", JSON.stringify(data));
     toast.success(data.message, {
       position: toast.POSITION.TOP_CENTER,
@@ -186,7 +186,7 @@ export const signout = () => {
   if (typeof window != "undefined") {
     localStorage.clear();
 
-    toast.error("logout sucessful", {
+    toast.error("logout", {
       position: toast.POSITION.TOP_CENTER,
     });
   }

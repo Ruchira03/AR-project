@@ -6,9 +6,11 @@ import Login from "./pages/Login";
 import SignUp from "./pages/Signup";
 import "./App.scss";
 import Ownerlogin from "./pages/owner/login";
-import Ownerhomepage from "./pages/owner/homepage";
+import Ownerhomepage from "./pages/owner/Homepage";
 import Addproduct from "./pages/owner/addproduct";
 import Products from "./pages/products";
+import Editproduct from "./pages/owner/editproduct";
+import ProductDisplay from "./pages/Product_display";
 
 function App() {
   console.log("API IS ", API);
@@ -23,6 +25,8 @@ function App() {
           <Route path="/ownerhome" element={<Ownerhomepage />} />
           <Route path="/addproduct" element={<Addproduct />} />
           <Route path="/products" element={<Products />} />
+          <Route path="/editproduct" element={<Editproduct />} />
+          <Route path="/productdisplay" element={<ProductDisplay />} />
         </>
       </Routes>
     </BrowserRouter>

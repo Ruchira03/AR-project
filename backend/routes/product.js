@@ -4,8 +4,12 @@ const controller = require("../controllers/product");
 const multer = require("multer");
 
 const storage = multer.memoryStorage();
-const upload = multer({ storage: storage }).single("file");
-
+const upload = multer({ storage: storage }).fields([
+  { name: "image", maxCount: 1 },
+  { name: "gltf", maxCount: 1 },
+  { name: "bin", maxCount: 1 },
+  { name: "folder", maxCount: 50 },
+]);
 router.post("/product/add", authJWT.verifyToken, upload, controller.addProduct);
 
 router.get("/products", authJWT.verifyToken, controller.getAllProducts);
