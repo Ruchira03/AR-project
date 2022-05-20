@@ -9,6 +9,9 @@ var authRouter = require("./routes/auth");
 var categoryRouter = require("./routes/category");
 const errorHandler = require("./middleware/errorHandler");
 const productRouter = require("./routes/product");
+const cartRouter = require("./routes/cart");
+const orderRouter = require("./routes/order");
+
 require("dotenv").config();
 var app = express();
 const bodyParser = require("body-parser");
@@ -42,6 +45,8 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/api", authRouter);
 app.use("/api", categoryRouter);
 app.use("/api", productRouter);
+app.use("/api", cartRouter);
+app.use("/api", orderRouter);
 
 //catch error
 app.use(errorHandler);

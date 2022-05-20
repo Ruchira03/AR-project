@@ -19,50 +19,62 @@ exports.addProduct = (req, res, next) => {
     const product_id = nanoid(10);
 
     // Grab the file
-    console.log("request bandide but adralli enu ilaa kano sorry");
+    // console.log("request bandide but adralli enu ilaa kano sorry");
+
+    // console.log(req.body)
     console.log(req.files);
-    const imagefile = req.files.image;
-    const gltffile = req.files.gltf;
-    const binfile = req.files.bin;
-    const folder = req.files.folder;
-    const fileName = imagefile.originalname;
+
+    const imagefile = req.files.image[0];
+    const glbfile = req.files.glb[0];
+
+    console.log(product_id);
 
     // Step 1. Create reference for file name in cloud storage
-    const imageRef = ref(storage, `${product_id}/${fileName}`);
+    const imageRef = ref(storage, `${product_id}/${imagefile.originalname}`);
+    const glbRef = ref(storage, `${product_id}/${glbfile.originalname}`);
+    // const binRef = ref(storage, `${product_id}/${binfile.originalname}`);
+    // console.log(gltfRef)
 
     // Step 2. Upload the file in the bucket storage
-    uploadBytes(imageRef, req.files.buffer).then((snapshot) => {
-      console.log("Uploaded a blob or file!");
-      // Step 3. Grab the public url
-      getDownloadURL(imageRef).then((url) => {
-        console.log(url);
-        const product = new Product({
-          product_id: product_id,
-          name: req.body.name,
-          desc: req.body.desc,
-          price: req.body.price,
-          model_3D_path: "",
-          image_path: url,
-          quantity: req.body.quantity,
-          category_id: req.body.category_id,
-        });
+    uploadBytes(imageRef, imagefile.buffer).then((snapshot) => {
+      console.log("Uploaded image file...");
 
-        console.log(product);
+      uploadBytes(glbRef, glbfile.buffer).then((snapshot) => {
+        console.log("Uploaded glb file...");
+        // Step 3. Grab the public url
 
-        product.save((err, category) => {
-          if (err) {
-            console.log(err);
-          } else {
-            res.status(200).send({
-              message: "Product Added successfully!",
-              category_data: category,
+        getDownloadURL(imageRef).then((image_url) => {
+          console.log(image_url);
+
+          getDownloadURL(glbRef).then((glb_url) => {
+            console.log(glb_url);
+            const product = new Product({
+              product_id: product_id,
+              name: req.body.name,
+              desc: req.body.desc,
+              price: req.body.price,
+              model_3D_path: glb_url,
+              image_path: image_url,
+              quantity: req.body.quantity,
+              category_id: req.body.category_id,
             });
-          }
+
+            console.log(product);
+
+            product.save((err, category) => {
+              if (err) {
+                console.log(err);
+              } else {
+                res.status(200).send({
+                  message: "Product Added successfully!",
+                  category_data: category,
+                });
+              }
+            });
+          });
         });
       });
     });
-
-    // res.send(downloadURL);
   } catch (error) {
     console.log(error);
     res.status(400).send(error.message);

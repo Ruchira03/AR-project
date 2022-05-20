@@ -2,21 +2,22 @@ import { API } from "../backend";
 import axios from "axios";
 import { toast } from "react-toastify";
 
-export const addproduct = (product, image, folder, gltffile, binfile) => {
-  console.log(product, image, folder, gltffile, binfile);
+export const addproduct = (product, image, glbfile) => {
+  console.log(image,glbfile);
   const formData = new FormData();
   formData.append("name", product.name);
   formData.append("desc", product.desc);
   formData.append("price", product.price);
   formData.append("quantity", product.quantity);
   formData.append("category_id", product.category_id);
+  // formData.append("folder_name", product.foldername);
   formData.append("image", image);
-  formData.append("gltf", gltffile);
-  formData.append("bin", binfile);
-  var ins = folder.length;
-  for (var x = 0; x < ins; x++) {
-    formData.append("folder", folder[x]);
-  }
+  formData.append("glb", glbfile);
+  // formData.append("bin", binfile);
+  // var ins = folder.length;
+  // for (var x = 0; x < ins; x++) {
+  //   formData.append("folder", folder[x]);
+  // }
 
   console.log(formData);
   return axios

@@ -23,6 +23,8 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import Box from "@material-ui/core/Box";
+import { Button } from "@material-ui/core";
+
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -182,8 +184,50 @@ export default function Homepage() {
   };
 
   const handleChange = (e) => {
-    
-    alert(e.target.value);
+    axios
+      .get(
+        `${API}/products/${e.target.value}`,
+
+        {
+          headers: {
+            "x-access-token": localStorage.getItem("token"),
+          },
+        }
+      )
+      .then((response) => {
+        setproductlist(response.data.products);
+
+        localStorage.setItem(
+          "products",
+          JSON.stringify(response.data.products)
+        );
+      })
+      .catch(function (error) {
+        console.log("responded");
+        if (error.response) {
+          // Request made and server responded
+          console.log(error.response.data);
+          toast.error(error.response.data.errorMessage, {
+            position: toast.POSITION.TOP_CENTER,
+          });
+          console.log(error.response.data.errorMessage);
+          console.log("status " + error.response.status);
+          console.log(error.response.headers);
+        } else if (error.request) {
+          // The request was made but no response was received
+          toast.error(error.request, {
+            position: toast.POSITION.TOP_CENTER,
+          });
+          console.log("err request  " + error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          toast.error(error.message, {
+            position: toast.POSITION.TOP_CENTER,
+          });
+          console.log("Error", error);
+        }
+        throw error;
+      });
   };
   return (
     <div style={{ display: "flex", flexDirection: "row" }}>
@@ -197,6 +241,9 @@ export default function Homepage() {
               </li>
               <li>
                 <a href="/addproduct">Add Products</a>
+              </li>
+              <li>
+                <a href="/owner/orders">Orders</a>
               </li>
               <li onClick={signout}>
                 <a href="/">Logout</a>
@@ -236,7 +283,7 @@ export default function Homepage() {
       </div>
       <div
         style={{
-          marginLeft: "0px",
+          marginLeft: "50px",
           marginTop: "150px",
           display: "flex",
           flexDirection: "column",
@@ -260,12 +307,16 @@ export default function Homepage() {
                         title="Contemplative Reptile"
                         alt=""
                       />
-                      <CardContent>
+                      <CardContent style={{ width: 350 }}>
                         <Typography gutterBottom variant="h5" component="h2">
                           {prod.name}
                         </Typography>
-                        <Typography gutterBottom variant="body1" component="h3">
-                          ₹ {prod.price}
+                        <Typography
+                          variant="body2"
+                          color="textSecondary"
+                          component="p"
+                        >
+                          {prod.price}
                         </Typography>
                       </CardContent>
                     </CardActionArea>
@@ -292,6 +343,21 @@ export default function Homepage() {
               ))}
             </Grid>
           </Grid>
+          {productlist.length == 0 && (
+            <div
+              style={{
+                marginLeft: "450px",
+                marginTop: "200px",
+              }}
+            >
+              <Typography gutterBottom variant="h5" component="h1">
+                oh ohh there is nothing in this category
+              </Typography>
+              <Button href="/addproduct" variant="contained" color="primary">
+                add a product to this category
+              </Button>
+            </div>
+          )}
         </Grid>
       </div>
     </div>

@@ -6,16 +6,14 @@ const multer = require("multer");
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage }).fields([
   { name: "image", maxCount: 1 },
-  { name: "gltf", maxCount: 1 },
-  { name: "bin", maxCount: 1 },
-  { name: "folder", maxCount: 50 },
+  { name: "glb", maxCount: 1 },
 ]);
 router.post("/product/add", authJWT.verifyToken, upload, controller.addProduct);
 
 router.get("/products", authJWT.verifyToken, controller.getAllProducts);
 
 router.get(
-  "/products/?category_id",
+  "/products/:category_id",
   authJWT.verifyToken,
   controller.getProductByCategory
 );

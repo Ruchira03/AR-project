@@ -11,7 +11,9 @@ import Addproduct from "./pages/owner/addproduct";
 import Products from "./pages/products";
 import Editproduct from "./pages/owner/editproduct";
 import ProductDisplay from "./pages/Product_display";
-
+import Cart from "./pages/cart";
+import Order from "./pages/order";
+import Ownerorder from "./pages/owner/Order";
 function App() {
   console.log("API IS ", API);
   return (
@@ -27,6 +29,9 @@ function App() {
           <Route path="/products" element={<Products />} />
           <Route path="/editproduct" element={<Editproduct />} />
           <Route path="/productdisplay" element={<ProductDisplay />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/orders" element={<Order />} />
+          <Route path="/owner/orders" element={<Ownerorder />} />
         </>
       </Routes>
     </BrowserRouter>

@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import { React, useRef, useState, useEffect } from "react";
 import "./product_display.scss";
 import { Canvas, useFrame, extend, useThree } from "@react-three/fiber";
 import { useGLTF } from "@react-three/drei";
@@ -6,8 +6,68 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import Navbar from "../components/Navbar/navbar";
 import { FaRupeeSign } from "react-icons/fa";
 import { Typography } from "@material-ui/core";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import axios from "axios";
+import { API } from "../backend";
 
 export default function ProductDisplay() {
+  const navigate = useNavigate();
+  const [product, setproduct] = useState({});
+  useEffect(() => {
+    setproduct(JSON.parse(localStorage.getItem("selectedProduct")));
+  }, []);
+
+  const addToCart = (product) => {
+    const body = {
+      user_id: JSON.parse(localStorage.getItem("jwt")).userData.user_id,
+      product_id: product.product_id,
+      name: product.name,
+      desc: product.desc,
+      price: product.price,
+      image_path: product.image_path,
+    };
+    axios
+      .post(`${API}/cart/add`, body, {
+        headers: {
+          "x-access-token": localStorage.getItem("token"),
+        },
+      })
+      .then((response) => {
+        console.log(response);
+        toast.success(response.data.message, {
+          position: toast.POSITION.TOP_CENTER,
+        });
+        navigate("/products");
+      })
+      .catch(function (error) {
+        console.log("responded");
+        if (error.response) {
+          // Request made and server responded
+          console.log(error.response.data);
+          toast.error(error.response.data.errorMessage, {
+            position: toast.POSITION.TOP_CENTER,
+          });
+          console.log(error.response.data.errorMessage);
+          console.log("status " + error.response.status);
+          console.log(error.response.headers);
+        } else if (error.request) {
+          // The request was made but no response was received
+          toast.error(error.request, {
+            position: toast.POSITION.TOP_CENTER,
+          });
+          console.log("err request  " + error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          toast.error(error.message, {
+            position: toast.POSITION.TOP_CENTER,
+          });
+          console.log("Error", error);
+        }
+        throw error;
+      });
+  };
+
   return (
     <>
       <Navbar />
@@ -17,27 +77,29 @@ export default function ProductDisplay() {
           <Lights />
           <spotLight intensity={0.3} position={[5, 10, 50]} />
           <mesh position={[0, -35, 0]}>
-            <Model />
+            <Model link={product.model_3D_path} />
           </mesh>
         </Canvas>
         <div className="text">
           <Typography gutterBottom variant="h5" component="h2">
-            Title
+            {product.name}
           </Typography>
           <Typography gutterBottom component="p">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos eum
-            perferendis, numquam laboriosam sunt culpa molestiae nesciunt neque
-            esse voluptate, iure architecto excepturi inventore iusto fuga? Quas
-            numquam odit voluptatibus!
+            {product.desc}
           </Typography>
 
           <div>
             <Typography gutterBottom variant="h5" component="h2">
-              ₹ 5,000
+              ₹ {product.price}
             </Typography>
           </div>
 
-          <button className="button">
+          <button
+            className="button"
+            onClick={() => {
+              addToCart(product);
+            }}
+          >
             <Typography gutterBottom variant="h5" component="p">
               Add to cart
             </Typography>
@@ -48,8 +110,8 @@ export default function ProductDisplay() {
   );
 }
 
-const Model = () => {
-  const gltf = useGLTF("/armchairYellow.gltf", true);
+const Model = ({ link }) => {
+  const gltf = useGLTF(link, true);
   return <primitive object={gltf.scene} dispose={null} />;
 };
 

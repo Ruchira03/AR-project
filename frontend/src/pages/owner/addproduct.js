@@ -27,9 +27,9 @@ const useStyles = makeStyles((theme) => ({
   selectEmpty: {
     marginTop: theme.spacing(2),
   },
-  input: {
-    display: "none",
-  },
+  // input: {
+  //   display: "none",
+  // },
 }));
 
 export default function Addproduct() {
@@ -38,9 +38,7 @@ export default function Addproduct() {
   }, []);
 
   const [image, setimage] = useState(null);
-  const [folder, setfolder] = useState(null);
-  const [gltffile, setgltffile] = useState(null);
-  const [binfile, setbinfile] = useState(null);
+  const [glbfile, setglbfile] = useState(null);
   const [values, setvalues] = useState({
     name: "",
     desc: "",
@@ -59,7 +57,7 @@ export default function Addproduct() {
   const onSubmit = () => {
     setvalues({ ...values });
     console.log("naane ne state inda");
-    console.log(image, folder, gltffile, binfile);
+    console.log(image, glbfile);
     addproduct(
       {
         name,
@@ -69,9 +67,7 @@ export default function Addproduct() {
         category_id,
       },
       image,
-      folder,
-      gltffile,
-      binfile
+      glbfile
     )
       .then((data) => {
         console.log(data);
@@ -82,7 +78,7 @@ export default function Addproduct() {
           quantity: "",
           category_id: "",
         });
-        setimage(null);
+        // setimage(null);
         if (!data) {
           toast.error(data.error, {
             position: toast.POSITION.TOP_LEFT,
@@ -104,24 +100,27 @@ export default function Addproduct() {
 
   return (
     <div style={{ display: "flex", flexDirection: "row" }}>
-      <header>
-        <div className="header-inner">
-          <img src={logo} alt="logo" />
-          <nav>
-            <ul>
-              <li>
-                <a href="/ownerhome">Products</a>
-              </li>
-              <li>
-                <a href="/addproduct">Add Products</a>
-              </li>
-              <li onClick={signout}>
-                <a href="/">Logout</a>
-              </li>
-            </ul>
-          </nav>
-        </div>
-      </header>
+    <header>
+    <div className="header-inner">
+      <img src={logo} alt="logo" />
+      <nav>
+        <ul>
+          <li>
+            <a href="/ownerhome">Products</a>
+          </li>
+          <li>
+            <a href="/addproduct">Add Products</a>
+          </li>
+          <li>
+            <a href="/owner/orders">Orders</a>
+          </li>
+          <li onClick={signout}>
+            <a href="/">Logout</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
 
       <div
         style={{
@@ -206,61 +205,20 @@ export default function Addproduct() {
               component="span"
               fullWidth
             >
-              upload gltf
+              upload glb
               <input
                 className={classes.input}
                 id="contained-button-gltf"
                 onChange={(event) => {
                   if (event.target.files) {
-                    setgltffile(event.target.files[0]);
+                    setglbfile(event.target.files[0]);
                   }
                 }}
                 type="file"
               />
             </Button>
           </label>
-          <label htmlFor="contained-button-bin">
-            <Button
-              variant="contained"
-              color="primary"
-              component="span"
-              fullWidth
-            >
-              upload bin file
-              <input
-                className={classes.input}
-                id="contained-button-bin"
-                onChange={(event) => {
-                  if (event.target.files && event.target.files[0]) {
-                    setbinfile(event.target.files[0]);
-                  }
-                }}
-                type="file"
-              />
-            </Button>
-          </label>
-          <input
-            id="contained-button"
-            className={classes.input}
-            directory=""
-            webkitdirectory=""
-            onChange={(event) => {
-              if (event.target.files) {
-                setfolder(event.target.files);
-              }
-            }}
-            type="file"
-          />
-          <label htmlFor="contained-button">
-            <Button
-              variant="contained"
-              color="primary"
-              component="span"
-              fullWidth
-            >
-              upload asset folder
-            </Button>
-          </label>
+
           <Button variant="contained" onClick={onSubmit}>
             Add product
           </Button>
@@ -278,6 +236,7 @@ export default function Addproduct() {
               style={{ width: "450px", height: "300px" }}
               id="target"
               src={URL.createObjectURL(image)}
+              alt=""
             />
           )}
         </div>
