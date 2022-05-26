@@ -1,7 +1,7 @@
 import { React, useRef, useState, useEffect } from "react";
 import "./product_display.scss";
 import { Canvas, useFrame, extend, useThree } from "@react-three/fiber";
-import { useGLTF } from "@react-three/drei";
+import { useGLTF, Stage } from "@react-three/drei";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import Navbar from "../components/Navbar/navbar";
 import { FaRupeeSign } from "react-icons/fa";
@@ -73,12 +73,14 @@ export default function ProductDisplay() {
       <Navbar />
       <div className="product-container">
         <Canvas className="canvas">
-          <Controls />
-          <Lights />
-          <spotLight intensity={0.3} position={[5, 10, 50]} />
-          <mesh position={[0, -35, 0]}>
-            <Model link={product.model_3D_path} />
-          </mesh>
+          <Stage preset="rembrandt" intensity={1} environment="city">
+            <Controls />
+            <Lights />
+            <spotLight intensity={0.3} position={[5, 10, 50]} />
+            <mesh position={[0, -35, 0]}>
+              <Model link={product.model_3D_path} />
+            </mesh>
+          </Stage>
         </Canvas>
         <div className="text">
           <Typography gutterBottom variant="h5" component="h2">
