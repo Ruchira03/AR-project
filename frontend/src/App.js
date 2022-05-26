@@ -6,7 +6,7 @@ import Login from "./pages/Login";
 import SignUp from "./pages/Signup";
 import "./App.scss";
 import Ownerlogin from "./pages/owner/login";
-import Ownerhomepage from "./pages/owner/Homepage";
+import Ownerhomepage from "./pages/owner/homepage";
 import Addproduct from "./pages/owner/addproduct";
 import Products from "./pages/products";
 import Editproduct from "./pages/owner/editproduct";
