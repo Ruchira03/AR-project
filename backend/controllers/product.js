@@ -1,5 +1,5 @@
 const { nanoid } = require("nanoid");
-const db = require("../Models");
+const db = require("../models/index");
 const Product = db.product;
 const ErrorResponse = require("../utils/errorResponse");
 const firebase = require("../utils/firebaseDB");

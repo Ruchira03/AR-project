@@ -1,5 +1,5 @@
 const { nanoid } = require("nanoid");
-const db = require("../Models");
+const db = require("../models/index");
 const Order = db.order;
 const Cart = db.cart;
 const ErrorResponse = require("../utils/errorResponse");

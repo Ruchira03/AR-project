@@ -1,4 +1,3 @@
-var createError = require("http-errors");
 var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
@@ -7,10 +6,11 @@ const cors = require("cors");
 var db = require("./models/index");
 var authRouter = require("./routes/auth");
 var categoryRouter = require("./routes/category");
-const errorHandler = require("./middleware/errorHandler");
 const productRouter = require("./routes/product");
 const cartRouter = require("./routes/cart");
 const orderRouter = require("./routes/order");
+var port = process.env.PORT || 3001;
+console.log(port);
 
 require("dotenv").config();
 var app = express();
@@ -35,7 +35,6 @@ db.mongoose
     process.exit();
   });
 
-app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors());
@@ -49,6 +48,12 @@ app.use("/api", cartRouter);
 app.use("/api", orderRouter);
 
 //catch error
-app.use(errorHandler);
+//app.use(errorHandler);
+app.get("/", (req, res) => {
+  res.send("hello there!");
+});
+app.listen(process.env.PORT || "3001", () => {
+  console.log(`Example app listening on port ${port}`);
+});
 
 module.exports = app;

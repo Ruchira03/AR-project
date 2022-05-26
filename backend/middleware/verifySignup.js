@@ -1,4 +1,4 @@
-const db = require("../Models");
+const db = require("../models/index");
 const User = db.user;
 const dotenv = require("dotenv");
 const ErrorResponse = require("../utils/errorResponse");

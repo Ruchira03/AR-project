@@ -1,4 +1,4 @@
-const db = require("../Models");
+const db = require("../models/index");
 const User = db.user;
 const Owner = db.owner;
 const { nanoid } = require("nanoid");

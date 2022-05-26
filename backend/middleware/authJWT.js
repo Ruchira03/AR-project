@@ -1,11 +1,11 @@
 const jwt = require("jsonwebtoken");
-const db = require("../Models");
+const db = require("../models/index");
 const ErrorResponse = require("../utils/errorResponse");
 const User = db.user;
 
 verifyToken = (req, res, next) => {
   let token = req.headers["x-access-token"];
-  
+
   if (!token) {
     next(new ErrorResponse("No token provided", 404));
   } else {
