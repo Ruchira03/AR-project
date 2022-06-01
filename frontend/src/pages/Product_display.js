@@ -1,15 +1,16 @@
 import { React, useRef, useState, useEffect } from "react";
 import "./product_display.scss";
 import { Canvas, useFrame, extend, useThree } from "@react-three/fiber";
-import { useGLTF, Stage } from "@react-three/drei";
+import { useGLTF, Stage, Html } from "@react-three/drei";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import Navbar from "../components/Navbar/navbar";
-import { FaRupeeSign } from "react-icons/fa";
+import { FaCamera } from "react-icons/fa";
 import { Typography } from "@material-ui/core";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { API } from "../backend";
+import {ARApp} from "./ARApp"
 
 export default function ProductDisplay() {
   const navigate = useNavigate();
@@ -68,6 +69,13 @@ export default function ProductDisplay() {
       });
   };
 
+  const domContent = useRef();
+
+  useEffect(() => {
+    const app = new ARApp();
+    window.app = app;
+  },[]);
+
   return (
     <>
       <Navbar />
@@ -77,12 +85,15 @@ export default function ProductDisplay() {
             <Controls />
             <Lights />
             <spotLight intensity={0.3} position={[5, 10, 50]} />
-            <mesh position={[0, -35, 0]}>
-              <Model link={product.model_3D_path} />
-            </mesh>
+            <HTMLContent
+            domContent={domContent}
+            modelPath={product.model_3D_path}
+          > 
+          </HTMLContent>
           </Stage>
         </Canvas>
         <div className="text">
+        <FaCamera color="#000000" size="30px" onClick={() => window.app.showChair(product.model_3D_path)}/>
           <Typography gutterBottom variant="h5" component="h2">
             {product.name}
           </Typography>
@@ -112,8 +123,8 @@ export default function ProductDisplay() {
   );
 }
 
-const Model = ({ link }) => {
-  const gltf = useGLTF(link, true);
+const Model = ({ modelPath }) => {
+  const gltf = useGLTF(modelPath, true);
   return <primitive object={gltf.scene} dispose={null} />;
 };
 
@@ -128,6 +139,36 @@ const Lights = () => {
     </>
   );
 };
+
+const HTMLContent = ({
+  domContent,
+  children,
+  modelPath,
+}) => {
+  const ref = useRef();
+  useFrame(() => {
+    ref.current.rotation.y += 0.01;
+  });
+  // const [refItem, inView] = useInView({
+  //   threshold: 0,
+  // });
+
+  return (
+    
+      <>
+        <mesh ref={ref} position={[0, -35, 0]}>
+          <Model modelPath={modelPath} />
+        </mesh>
+        <Html portal={domContent} fullscreen>
+          <div className="container">
+            {children}
+          </div>
+        </Html>
+      </>
+   
+  );
+};
+
 
 extend({ OrbitControls });
 
