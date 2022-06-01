@@ -93,7 +93,7 @@ export default function ProductDisplay() {
           </Stage>
         </Canvas>
         <div className="text">
-        <FaCamera color="#000000" size="30px" onClick={() => window.app.showChair(product.model_3D_path)}/>
+        <FaCamera className="ar-button" color="#000000" size="30px" onClick={() => window.app.showChair(product.model_3D_path)}/>
           <Typography gutterBottom variant="h5" component="h2">
             {product.name}
           </Typography>
