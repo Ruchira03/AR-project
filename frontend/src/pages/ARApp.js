@@ -4,7 +4,7 @@ import { RGBELoader } from '../libs/three/jsm/RGBELoader';
 import { ARButton } from '../libs/ARButton.js';
 import { LoadingBar } from '../libs/LoadingBar.js';
 import { ControllerGestures } from '../libs/ControllerGestures.js';
-
+import { toast } from "react-toastify";
 
 class ARApp{
 	constructor(){
@@ -87,6 +87,11 @@ class ARApp{
                     [...collection].forEach( el => {
                         el.style.display = 'block';
                     });
+                }
+                else {
+                    toast.error("AR Not Supported", {
+                        position: toast.POSITION.TOP_CENTER,
+                      });
                 }
 			} );
             
