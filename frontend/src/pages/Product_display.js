@@ -85,11 +85,9 @@ export default function ProductDisplay() {
             <Controls />
             <Lights />
             <spotLight intensity={0.3} position={[5, 10, 50]} />
-            <HTMLContent
-            domContent={domContent}
-            modelPath={product.model_3D_path}
-          > 
-          </HTMLContent>
+            <mesh position={[0, -35, 0]}>
+              <Model modelPath={product.model_3D_path} />
+            </mesh>
           </Stage>
         </Canvas>
         <div className="text">

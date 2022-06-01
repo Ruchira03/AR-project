@@ -89,6 +89,7 @@ class ARApp{
                     });
                 }
                 else {
+                    console.log("AR not supported")
                     toast.error("AR Not Supported", {
                         position: toast.POSITION.TOP_CENTER,
                       });
