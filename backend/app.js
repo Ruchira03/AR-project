@@ -9,6 +9,7 @@ var categoryRouter = require("./routes/category");
 const productRouter = require("./routes/product");
 const cartRouter = require("./routes/cart");
 const orderRouter = require("./routes/order");
+const reviewRouter = require("./routes/review")
 const errorHandler = require('./middleware/errorHandler')
 var port = process.env.PORT || 3001;
 console.log(port);
@@ -47,6 +48,7 @@ app.use("/api", categoryRouter);
 app.use("/api", productRouter);
 app.use("/api", cartRouter);
 app.use("/api", orderRouter);
+app.use("/api", reviewRouter);
 
 //catch error
 app.use(errorHandler);

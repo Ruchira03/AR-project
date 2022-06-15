@@ -11,6 +11,7 @@ db.product = require("./product");
 db.owner = require("./owner");
 db.cart = require("./cart");
 db.order = require("./order");
+db.review = require("./review")
 // db.ROLES = ["user", "admin", "moderator"];
 
 module.exports = db;
