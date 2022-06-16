@@ -9,6 +9,7 @@ const cartSchema = new mongoose.Schema({
     desc: String,
     price: Number,
     image_path: String,
+    quantity : Number
 })
 
 const Cart = mongoose.models.carts || mongoose.model('carts', cartSchema);

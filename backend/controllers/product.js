@@ -57,6 +57,7 @@ exports.addProduct = (req, res, next) => {
               image_path: image_url,
               quantity: req.body.quantity,
               category_id: req.body.category_id,
+              rating : 0
             });
 
             console.log(product);
