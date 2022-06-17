@@ -15,7 +15,7 @@ import Cart from "./pages/cart";
 import Order from "./pages/order";
 import Ownerorder from "./pages/owner/Order";
 function App() {
-  console.log("API IS ", API);
+ 
   return (
     <BrowserRouter>
       <Routes>

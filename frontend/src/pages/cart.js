@@ -25,7 +25,6 @@ export default function Cart() {
       product_id: item.product_id,
       cart_id: item.cart_id,
     };
-    console.log(data);
     return axios
       .put(`${API}/cart/product/quantity/add`, data, {
         headers: {
@@ -33,7 +32,6 @@ export default function Cart() {
         },
       })
       .then((response) => {
-        console.log(response);
         fetchCart();
       })
       .catch(function (error) {
@@ -70,7 +68,6 @@ export default function Cart() {
       product_id: item.product_id,
       cart_id: item.cart_id,
     };
-    console.log(data);
     return axios
       .put(`${API}/cart/product/quantity/subtract`, data, {
         headers: {
@@ -78,7 +75,6 @@ export default function Cart() {
         },
       })
       .then((response) => {
-        console.log(response);
         fetchCart();
       })
       .catch(function (error) {
@@ -328,7 +324,6 @@ export default function Cart() {
         },
       })
       .then((response) => {
-        console.log(response.data.message);
         toast.success(response.data.message, {
           position: toast.POSITION.TOP_CENTER,
         });
@@ -381,7 +376,6 @@ export default function Cart() {
           },
         })
         .then((response) => {
-          console.log(response);
           toast.success(response.data.message, {
             position: toast.POSITION.TOP_CENTER,
           });
@@ -427,7 +421,6 @@ export default function Cart() {
         },
       })
       .then((response) => {
-        console.log(response.data);
         localStorage.setItem("order", response.data.Orders.length);
       })
       .catch(function (error) {

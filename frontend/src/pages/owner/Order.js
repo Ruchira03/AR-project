@@ -28,7 +28,6 @@ export default function OwnerOrder() {
         },
       })
       .then((response) => {
-        console.log(response.data);
         setorderList(response.data.Orders);
       })
       .catch(function (error) {
@@ -68,7 +67,6 @@ export default function OwnerOrder() {
         },
       })
       .then((response) => {
-        console.log(response.data);
         setorderList(response.data.Orders);
       })
       .catch(function (error) {
@@ -166,7 +164,6 @@ export default function OwnerOrder() {
         }
       )
       .then((response) => {
-        console.log(response);
         toast.success(response.data.message, {
           position: toast.POSITION.TOP_CENTER,
         });

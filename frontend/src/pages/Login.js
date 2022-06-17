@@ -71,7 +71,6 @@ export default function SignIn() {
     setvalues({ ...values, error: false });
     signin({ email, password })
       .then((res) => {
-        console.log(res);
         if (res.error) {
           toast.warn(res.error, {
             position: toast.POSITION.TOP_CENTER,

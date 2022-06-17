@@ -75,7 +75,6 @@ export default function Addproduct() {
       product_id,
     })
       .then((data) => {
-        console.log(data);
         setvalues({
           name: "",
           desc: "",

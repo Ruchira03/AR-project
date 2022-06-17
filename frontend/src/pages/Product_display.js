@@ -74,7 +74,6 @@ export default function ProductDisplay() {
         },
       })
       .then((response) => {
-        console.log(response);
         toast.success(response.data.message, {
           position: toast.POSITION.TOP_CENTER,
         });
@@ -123,7 +122,6 @@ export default function ProductDisplay() {
       )
       .then((response) => {
         setreviewList(response.data.reviews);
-        console.log(response.data.reviews);
       })
       .catch(function (error) {
         console.log("responded");
@@ -167,7 +165,6 @@ export default function ProductDisplay() {
       )
       .then((response) => {
         setproduct(response.data.productDetails);
-        console.log(response.data.productDetails);
       })
       .catch(function (error) {
         console.log("responded");
@@ -285,7 +282,6 @@ export default function ProductDisplay() {
         },
       })
       .then((response) => {
-        console.log(response);
         toast.success(response.data.message, {
           position: toast.POSITION.TOP_CENTER,
         });

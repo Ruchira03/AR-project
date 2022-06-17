@@ -81,8 +81,6 @@ export default function SignIn() {
       mobile_number,
     })
       .then((data) => {
-        console.log(data);
-
         if (!data) {
           toast.error(data.error, {
             position: toast.POSITION.TOP_CENTER,
@@ -113,7 +111,6 @@ export default function SignIn() {
       otp,
     })
       .then((res) => {
-        console.log(res);
         if (!res) {
           toast("something went wrong", {
             position: toast.POSITION.TOP_CENTER,

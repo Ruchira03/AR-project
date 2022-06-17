@@ -103,7 +103,6 @@ function Products() {
         localStorage.setItem("qty", response.data.Items.length);
       })
       .catch(function (error) {
-        console.log("responded");
         if (error.response) {
           // Request made and server responded
           console.log(error.response.data);

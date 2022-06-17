@@ -54,7 +54,6 @@ export default function Homepage() {
         },
       })
       .then((response) => {
-        console.log(response.data);
         setproductlist(response.data.products);
 
         localStorage.setItem(
@@ -101,7 +100,6 @@ export default function Homepage() {
         },
       })
       .then((response) => {
-        console.log(response.data);
 
         toast.success(response.data.message, {
           position: toast.POSITION.TOP_CENTER,
@@ -150,7 +148,6 @@ export default function Homepage() {
         },
       })
       .then((response) => {
-        console.log(response.data);
         setcategorylist(response.data);
         localStorage.setItem("categories", JSON.stringify(response.data));
       })
