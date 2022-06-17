@@ -58,8 +58,6 @@ export default function Addproduct() {
 
   const onSubmit = () => {
     setvalues({ ...values, loading: true });
-    console.log("naane ne state inda");
-    console.log(image, glbfile);
     addproduct(
       {
         name,
@@ -72,7 +70,6 @@ export default function Addproduct() {
       glbfile
     )
       .then((data) => {
-        console.log(data);
         setvalues({
           name: "",
           desc: "",

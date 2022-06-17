@@ -8,7 +8,6 @@ const ErrorResponse = require("../utils/errorResponse");
 
 exports.signup = (req, res, next) => {
   let userId = nanoid(10);
-  console.log(req.body.mobile_number);
   const user = new User({
     user_id: userId,
     name: req.body.name,
@@ -28,7 +27,6 @@ exports.signup = (req, res, next) => {
 
   user.save((err, user) => {
     if (err) {
-      console.log("hyy lo naan helillva naane tondre kododu anta");
       console.log(err);
       next(new ErrorResponse(err, 500));
     } else {
