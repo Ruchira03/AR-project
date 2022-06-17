@@ -14,7 +14,7 @@ exports.signup = (req, res, next) => {
     name: req.body.name,
     email: req.body.email,
     password: bcrypt.hashSync(req.body.password, 8),
-    mobile_number: req.body.mobile_number,
+    mobile_number: Number(req.body.mobile_number),
   });
 
   // console.log(publicKey, privateKey);
@@ -28,12 +28,13 @@ exports.signup = (req, res, next) => {
 
   user.save((err, user) => {
     if (err) {
+      console.log("hyy lo naan helillva naane tondre kododu anta");
       console.log(err);
       next(new ErrorResponse(err, 500));
     } else {
       res.send({
         message: "User verified and registered successfully!",
-        details: user,
+        userData: user,
         access_token: token,
         verifieddata: req.body.data,
       });
@@ -109,7 +110,7 @@ exports.signin_mobile_password = (req, res, next) => {
   });
 };
 
-exports.ownerSignIn = (req, res) => {
+exports.ownerSignIn = (req, res, next) => {
   Owner.findOne({ email: req.body.email }).exec((err, owner) => {
     if (err) {
       next(new ErrorResponse(err, 500));

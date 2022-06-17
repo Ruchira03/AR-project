@@ -5,7 +5,7 @@ const User = db.user;
 
 verifyToken = (req, res, next) => {
   let token = req.headers["x-access-token"];
-
+  // console.log(token);
   if (!token) {
     next(new ErrorResponse("No token provided", 404));
   } else {

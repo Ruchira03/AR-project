@@ -60,8 +60,7 @@ export default function SignIn() {
     didRedirict: false,
   });
   const navigate = useNavigate();
-  const { email, password, didRedirict } = values;
-  const { user } = isAuthenticated();
+  const { email, password } = values;
 
   const handleChange = (name) => (event) => {
     setvalues({ ...values, error: false, [name]: event.target.value });
@@ -72,15 +71,17 @@ export default function SignIn() {
     setvalues({ ...values, error: false });
     signin({ email, password })
       .then((res) => {
+        console.log(res);
         if (res.error) {
           toast.warn(res.error, {
             position: toast.POSITION.TOP_CENTER,
           });
           setvalues({ ...values, error: res.error });
         } else {
-          toast.success("sucess", {
+          toast.success(res.data, {
             position: toast.POSITION.TOP_CENTER,
           });
+          localStorage.setItem("owner", false);
           authenticate(res, () => {
             setvalues({ ...values, didRedirict: true });
             navigate("/userhomepage");
@@ -110,7 +111,7 @@ export default function SignIn() {
             <Typography component="h1" variant="h5">
               Sign in
             </Typography>
-            <form className={classes.form} noValidate>
+            <form className={classes.form} noValidate onSubmit={onSubmit}>
               <TextField
                 variant="outlined"
                 margin="normal"
@@ -144,7 +145,6 @@ export default function SignIn() {
                 fullWidth
                 variant="contained"
                 color="primary"
-                onClick={onSubmit}
                 className={classes.submit}
               >
                 Sign In

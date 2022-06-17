@@ -1,7 +1,6 @@
 import { React, useState, useEffect } from "react";
 import logo from "../../assets/logo.jpg";
 import { signout } from "../../helper/Auth";
-import ShoppingCartRoundedIcon from "@material-ui/icons/ShoppingCartRounded";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
@@ -15,9 +14,10 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import DoneIcon from "@material-ui/icons/Done";
 export default function OwnerOrder() {
   const [orderList, setorderList] = useState([]);
-
+  const [productList, setproductList] = useState([]);
   useEffect(() => {
     fetchallorders();
+    setproductList(JSON.parse(localStorage.getItem("products")));
   }, []);
 
   const handleChange = (e) => {
@@ -60,42 +60,6 @@ export default function OwnerOrder() {
   };
 
   const fetchallorders = () => {
-    // axios
-    //   .get(`${API}/allorders`, {
-    //     headers: {
-    //       "x-access-token": localStorage.getItem("token"),
-    //     },
-    //   })
-    //   .then((response) => {
-    //     console.log(response.data.Orders);
-    //     setorderList(response.data.Orders);
-    //   })
-    //   .catch(function (error) {
-    //     console.log("responded");
-    //     if (error.response) {
-    //       // Request made and server responded
-    //       console.log(error.response.data);
-    //       toast.error(error.response.data.errorMessage, {
-    //         position: toast.POSITION.TOP_CENTER,
-    //       });
-    //       console.log(error.response.data.errorMessage);
-    //       console.log("status " + error.response.status);
-    //       console.log(error.response.headers);
-    //     } else if (error.request) {
-    //       // The request was made but no response was received
-    //       toast.error(error.request, {
-    //         position: toast.POSITION.TOP_CENTER,
-    //       });
-    //       console.log("err request  " + error.request);
-    //     } else {
-    //       // Something happened in setting up the request that triggered an Error
-    //       toast.error(error.message, {
-    //         position: toast.POSITION.TOP_CENTER,
-    //       });
-    //       console.log("Error", error);
-    //     }
-    //     throw error;
-    //   });
     const StatusReq = "Pending";
     axios
       .get(`${API}/order/status/${StatusReq}`, {
@@ -135,11 +99,66 @@ export default function OwnerOrder() {
       });
   };
 
+  const fetchdetails = () => {
+    axios
+      .get(`${API}/products`, {
+        headers: {
+          "x-access-token": localStorage.getItem("token"),
+          "content-type": "multipart/form-data",
+        },
+      })
+      .then((response) => {
+        setproductList(response.data.products);
+
+        localStorage.setItem(
+          "products",
+          JSON.stringify(response.data.products)
+        );
+      })
+      .catch(function (error) {
+        console.log("responded");
+        if (error.response) {
+          // Request made and server responded
+          console.log(error.response.data);
+          toast.error(error.response.data.errorMessage, {
+            position: toast.POSITION.TOP_CENTER,
+          });
+          console.log(error.response.data.errorMessage);
+          console.log("status " + error.response.status);
+          console.log(error.response.headers);
+        } else if (error.request) {
+          // The request was made but no response was received
+          toast.error(error.request, {
+            position: toast.POSITION.TOP_CENTER,
+          });
+          console.log("err request  " + error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          toast.error(error.message, {
+            position: toast.POSITION.TOP_CENTER,
+          });
+          console.log("Error", error);
+        }
+        throw error;
+      });
+  };
+
   const executeOrder = (order) => {
+    var avlquantity = 0;
+    productList.map((currProduct) => {
+      if (currProduct.product_id === order.product_id) {
+        avlquantity = currProduct.quantity;
+      }
+    });
     axios
       .put(
         `${API}/order/execute`,
-        { order_id: order.order_id },
+        {
+          order_id: order.order_id,
+          cart_quantity: order.quantity,
+          product_id: order.product_id,
+          available_quantity: avlquantity,
+        },
         {
           headers: {
             "x-access-token": localStorage.getItem("token"),
@@ -151,6 +170,7 @@ export default function OwnerOrder() {
         toast.success(response.data.message, {
           position: toast.POSITION.TOP_CENTER,
         });
+        fetchdetails();
         fetchallorders();
       })
       .catch(function (error) {
@@ -302,7 +322,7 @@ export default function OwnerOrder() {
             >
               {order.status}
             </Card>
-            {order.status == "Pending" && (
+            {order.status === "Pending" && (
               <Card
                 style={{
                   display: "flex",
@@ -322,7 +342,7 @@ export default function OwnerOrder() {
                 </IconButton>
               </Card>
             )}
-            {order.status != "Pending" && (
+            {order.status !== "Pending" && (
               <Card
                 style={{
                   display: "flex",
@@ -354,7 +374,7 @@ export default function OwnerOrder() {
       <header>
         <div className="header-inner">
           <img src={logo} alt="logo" />
-          <nav>
+          <nav className="desktop-view">
             <ul>
               <li>
                 <a href="/ownerhome">Products</a>
@@ -410,7 +430,7 @@ export default function OwnerOrder() {
           {renderOrder()}
         </div>
       )}
-      {orderList.length == 0 && (
+      {orderList.length === 0 && (
         <div
           style={{
             marginLeft: "150px",
@@ -419,7 +439,7 @@ export default function OwnerOrder() {
             flexDirection: "column",
           }}
         >
-          <h1>oh ohh sorry no orders</h1>
+          <h1> No Pending Orders</h1>
         </div>
       )}
     </div>

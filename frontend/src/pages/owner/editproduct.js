@@ -8,7 +8,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
 import Button from "@material-ui/core/Button";
 import { ToastContainer, toast } from "react-toastify";
-import { editproduct, getcategory } from "../../helper/owner";
+import { editproduct } from "../../helper/owner";
 import { signout } from "../../helper/Auth";
 import { useNavigate } from "react-router-dom";
 
@@ -109,7 +109,7 @@ export default function Addproduct() {
       <header>
         <div className="header-inner">
           <img src={logo} alt="logo" />
-          <nav>
+          <nav className="desktop-view">
             <ul>
               <li>
                 <a href="/ownerhome">Products</a>
@@ -198,6 +198,7 @@ export default function Addproduct() {
             <img
               style={{ width: "450px", height: "300px" }}
               id="target"
+              alt=""
               src={JSON.parse(localStorage.getItem("edit")).image_path}
             />
           }

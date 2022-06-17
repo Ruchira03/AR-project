@@ -3,6 +3,7 @@ const db = require("../models/index");
 const Order = db.order;
 const Cart = db.cart;
 const ErrorResponse = require("../utils/errorResponse");
+const Product = db.product;
 
 //user order place madakke                      ------------------------compleated
 exports.placeOrder = (req, res, next) => {
@@ -78,7 +79,9 @@ exports.cancelOrder = (req, res, next) => {
 };
 
 //to execute order by owner   ------------------------------------------------------compleated
+//  order_id,  available_quantity,  cart_quantity,    product_id
 exports.executeOrder = (req, res, next) => {
+  console.log(req.body);
   Order.findOneAndUpdate(
     { order_id: req.body.order_id },
     {
@@ -87,7 +90,18 @@ exports.executeOrder = (req, res, next) => {
   ).exec((err, result) => {
     if (err) next(new ErrorResponse(err, 500));
     else {
-      res.status(200).send({ message: "Order Succesful!" });
+      const remaining_quantity =
+        req.body.available_quantity - req.body.cart_quantity;
+      Product.findOneAndUpdate(
+        { product_id: req.body.product_id },
+        { quantity: remaining_quantity },
+        { upsert: true }
+      ).exec((err, result) => {
+        if (err) next(new ErrorResponse(err, 500));
+        else {
+          res.status(200).send({ message: "Order Succesful!" });
+        }
+      });
     }
   });
 };

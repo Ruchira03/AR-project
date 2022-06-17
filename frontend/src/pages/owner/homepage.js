@@ -2,7 +2,6 @@ import { React, useState, useEffect } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import logo from "../../assets/logo.jpg";
 import "../../components/Navbar/navbar.scss";
-import { deleteProduct, getproductlist } from "../../helper/owner";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
@@ -184,57 +183,117 @@ export default function Homepage() {
   };
 
   const handleChange = (e) => {
-    axios
-      .get(
-        `${API}/products/${e.target.value}`,
+    if (e.target.value === 0) {
+      fetchdetails();
+    } else {
+      axios
+        .get(
+          `${API}/products/${e.target.value}`,
 
-        {
-          headers: {
-            "x-access-token": localStorage.getItem("token"),
-          },
-        }
-      )
-      .then((response) => {
-        setproductlist(response.data.products);
+          {
+            headers: {
+              "x-access-token": localStorage.getItem("token"),
+            },
+          }
+        )
+        .then((response) => {
+          setproductlist(response.data.products);
 
-        localStorage.setItem(
-          "products",
-          JSON.stringify(response.data.products)
-        );
-      })
-      .catch(function (error) {
-        console.log("responded");
-        if (error.response) {
-          // Request made and server responded
-          console.log(error.response.data);
-          toast.error(error.response.data.errorMessage, {
-            position: toast.POSITION.TOP_CENTER,
-          });
-          console.log(error.response.data.errorMessage);
-          console.log("status " + error.response.status);
-          console.log(error.response.headers);
-        } else if (error.request) {
-          // The request was made but no response was received
-          toast.error(error.request, {
-            position: toast.POSITION.TOP_CENTER,
-          });
-          console.log("err request  " + error.request);
-        } else {
-          // Something happened in setting up the request that triggered an Error
-          toast.error(error.message, {
-            position: toast.POSITION.TOP_CENTER,
-          });
-          console.log("Error", error);
-        }
-        throw error;
+          localStorage.setItem(
+            "products",
+            JSON.stringify(response.data.products)
+          );
+        })
+        .catch(function (error) {
+          console.log("responded");
+          if (error.response) {
+            // Request made and server responded
+            console.log(error.response.data);
+            toast.error(error.response.data.errorMessage, {
+              position: toast.POSITION.TOP_CENTER,
+            });
+            console.log(error.response.data.errorMessage);
+            console.log("status " + error.response.status);
+            console.log(error.response.headers);
+          } else if (error.request) {
+            // The request was made but no response was received
+            toast.error(error.request, {
+              position: toast.POSITION.TOP_CENTER,
+            });
+            console.log("err request  " + error.request);
+          } else {
+            // Something happened in setting up the request that triggered an Error
+            toast.error(error.message, {
+              position: toast.POSITION.TOP_CENTER,
+            });
+            console.log("Error", error);
+          }
+          throw error;
+        });
+    }
+  };
+
+  const handleSort = (e) => {
+    var choice = e.target.value;
+
+    //price lowest - highest
+    if (choice === 0) {
+      const list = [...productlist].sort(
+        (a, b) => parseInt(a.price) - parseInt(b.price)
+      );
+      setproductlist(list);
+    }
+    if (choice === 1) {
+      const list = [...productlist].sort(
+        (a, b) => parseInt(b.price) - parseInt(a.price)
+      );
+      setproductlist(list);
+    }
+    if (choice === 2) {
+      const list = [...productlist].reverse();
+      setproductlist(list);
+    }
+    if (choice === 3) {
+      const list = [...productlist].reverse();
+      setproductlist(list);
+    }
+    if (choice === 4) {
+      const list = [...productlist].sort(function (a, b) {
+        return a.name.localeCompare(b.name);
       });
+
+      setproductlist(list);
+    }
+    if (choice === 5) {
+      const list = [...productlist].sort(function (a, b) {
+        return b.name.localeCompare(a.name);
+      });
+
+      setproductlist(list);
+    }
+    if (choice === 6) {
+      const list = [...productlist].sort((a, b) => a.rating - b.rating);
+      setproductlist(list);
+    }
+    if (choice === 7) {
+      const list = [...productlist].sort((a, b) => b.rating - a.rating);
+      setproductlist(list);
+    }
+    if (choice === 8) {
+      fetchdetails();
+    }
+  };
+
+  const display = (product) => {
+    localStorage.setItem("selectedProduct", JSON.stringify(product));
+    navigate("/productdisplay");
   };
   return (
     <div style={{ display: "flex", flexDirection: "row" }}>
       <header>
         <div className="header-inner">
           <img src={logo} alt="logo" />
-          <nav>
+          <nav className="desktop-view">
             <ul>
               <li>
                 <a href="/ownerhome">Products</a>
@@ -254,8 +313,9 @@ export default function Homepage() {
       </header>
       <div
         style={{
-          marginLeft: "50px",
-          marginTop: "150px",
+          marginLeft: "25px",
+          marginTop: "120px",
+          display: "flex",
         }}
       >
         <Box sx={{ minWidth: 160 }}>
@@ -277,13 +337,40 @@ export default function Homepage() {
                   {category.name}
                 </MenuItem>
               ))}
+              <MenuItem value={0}>All</MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
+        <Box sx={{ minWidth: 160 }}>
+          <FormControl style={{ minWidth: 180, marginLeft: 10 }}>
+            <InputLabel id="demo-simple-select-label">sort products</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              onChange={(e) => {
+                handleSort(e);
+              }}
+              label="Sort"
+            >
+              <label>price</label>
+              <MenuItem value={0}>lowest to highest</MenuItem>
+              <MenuItem value={1}>highest to lowest</MenuItem>
+              <label>date</label>
+              <MenuItem value={2}>newest first</MenuItem>
+              <MenuItem value={3}>oldest first</MenuItem>
+              <label>name</label>
+              <MenuItem value={4}>A - Z</MenuItem>
+              <MenuItem value={5}>Z - A</MenuItem>
+              <label>rating</label>
+              <MenuItem value={6}>lowest to highest</MenuItem>
+              <MenuItem value={7}>highest to lowest</MenuItem>
+              <MenuItem value={8}>No Sort</MenuItem>
             </Select>
           </FormControl>
         </Box>
       </div>
       <div
         style={{
-          marginLeft: "50px",
           marginTop: "150px",
           display: "flex",
           flexDirection: "column",
@@ -298,7 +385,11 @@ export default function Homepage() {
                 <Grid key={prod.product_id} item>
                   <Paper className={classes.paper} />
                   <Card item>
-                    <CardActionArea>
+                    <CardActionArea
+                      onClick={() => {
+                        display(prod);
+                      }}
+                    >
                       <img
                         style={{ width: 350, height: 250 }}
                         className={classes.media}
@@ -317,6 +408,13 @@ export default function Homepage() {
                           component="p"
                         >
                           {prod.price}
+                        </Typography>
+                        <Typography
+                          variant="body2"
+                          color="textSecondary"
+                          component="p"
+                        >
+                          availability : {prod.quantity}
                         </Typography>
                       </CardContent>
                     </CardActionArea>
@@ -343,7 +441,7 @@ export default function Homepage() {
               ))}
             </Grid>
           </Grid>
-          {productlist.length == 0 && (
+          {productlist.length === 0 && (
             <div
               style={{
                 marginLeft: "450px",

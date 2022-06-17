@@ -1,10 +1,5 @@
 import { React, useState, useEffect } from "react";
-import logo from "../assets/logo.jpg";
-import ShoppingCartRoundedIcon from "@material-ui/icons/ShoppingCartRounded";
-import { signout } from "../helper/Auth";
-import Box from "@material-ui/core/Box";
 import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
@@ -15,18 +10,104 @@ import CancelOutlinedIcon from "@material-ui/icons/CancelOutlined";
 import { API } from "../backend";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
-import Navbar from "../components/Navbar/navbar"
+import Navbar from "../components/Navbar/navbar";
 
 export default function Cart() {
   const [cartItems, setcartItems] = useState([]);
-  const [quantities, setquantities] = useState([
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-  ]);
-  const [total, settotal] = useState(0);
 
   useEffect(() => {
     fetchCart();
   }, []);
+
+  const addQuantity = (item) => {
+    const data = {
+      current_quantity: item.quantity,
+      product_id: item.product_id,
+      cart_id: item.cart_id,
+    };
+    console.log(data);
+    return axios
+      .put(`${API}/cart/product/quantity/add`, data, {
+        headers: {
+          "x-access-token": localStorage.getItem("token"),
+        },
+      })
+      .then((response) => {
+        console.log(response);
+        fetchCart();
+      })
+      .catch(function (error) {
+        console.log("responded");
+        if (error.response) {
+          // Request made and server responded
+          console.log(error.response.data);
+          toast.error(error.response.data.errorMessage, {
+            position: toast.POSITION.TOP_CENTER,
+          });
+          console.log(error.response.data.errorMessage);
+          console.log("status " + error.response.status);
+          console.log(error.response.headers);
+        } else if (error.request) {
+          // The request was made but no response was received
+          toast.error(error.request, {
+            position: toast.POSITION.TOP_CENTER,
+          });
+          console.log("err request  " + error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          toast.error(error.message, {
+            position: toast.POSITION.TOP_CENTER,
+          });
+          console.log("Error", error);
+        }
+        throw error;
+      });
+  };
+
+  const subtractQuantity = (item) => {
+    const data = {
+      current_quantity: item.quantity,
+      product_id: item.product_id,
+      cart_id: item.cart_id,
+    };
+    console.log(data);
+    return axios
+      .put(`${API}/cart/product/quantity/subtract`, data, {
+        headers: {
+          "x-access-token": localStorage.getItem("token"),
+        },
+      })
+      .then((response) => {
+        console.log(response);
+        fetchCart();
+      })
+      .catch(function (error) {
+        console.log("responded");
+        if (error.response) {
+          // Request made and server responded
+          console.log(error.response.data);
+          toast.error(error.response.data.errorMessage, {
+            position: toast.POSITION.TOP_CENTER,
+          });
+          console.log(error.response.data.errorMessage);
+          console.log("status " + error.response.status);
+          console.log(error.response.headers);
+        } else if (error.request) {
+          // The request was made but no response was received
+          toast.error(error.request, {
+            position: toast.POSITION.TOP_CENTER,
+          });
+          console.log("err request  " + error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          toast.error(error.message, {
+            position: toast.POSITION.TOP_CENTER,
+          });
+          console.log("Error", error);
+        }
+        throw error;
+      });
+  };
 
   const card = () => {
     return (
@@ -40,8 +121,8 @@ export default function Cart() {
               justifyContent: "center",
               alignItems: "center",
               marginLeft: "10px",
-              fontWeight : "700",
-              height: "50px"
+              fontWeight: "700",
+              height: "50px",
             }}
           >
             Product
@@ -54,7 +135,7 @@ export default function Cart() {
               justifyContent: "center",
               alignItems: "center",
               marginLeft: "10px",
-              fontWeight : "700"
+              fontWeight: "700",
             }}
           >
             Description
@@ -67,7 +148,7 @@ export default function Cart() {
               justifyContent: "center",
               alignItems: "center",
               marginLeft: "10px",
-              fontWeight : "700"
+              fontWeight: "700",
             }}
           >
             Quantity
@@ -80,7 +161,7 @@ export default function Cart() {
               justifyContent: "center",
               alignItems: "center",
               marginLeft: "10px",
-              fontWeight : "700"
+              fontWeight: "700",
             }}
           >
             Remove
@@ -93,7 +174,7 @@ export default function Cart() {
               justifyContent: "center",
               alignItems: "center",
               marginLeft: "10px",
-              fontWeight : "700"
+              fontWeight: "700",
             }}
           >
             Total Price
@@ -139,24 +220,21 @@ export default function Cart() {
             >
               <IconButton
                 onClick={() => {
-                  let copy = [...quantities];
-                  copy[index]--;
-                  setquantities(copy);
+                  subtractQuantity(item);
                 }}
               >
                 <RemoveIcon color="primary" />
               </IconButton>
-              <TextField
-                value={quantities[index]}
-                style={{ width: "55px" }}
+              <h2
+                style={{ width: "55px", paddingLeft: "15px" }}
                 variant="outlined"
-              />
+              >
+                {item.quantity}
+              </h2>
 
               <IconButton
                 onClick={() => {
-                  let copy = [...quantities];
-                  copy[index]++;
-                  setquantities(copy);
+                  addQuantity(item);
                 }}
               >
                 <AddIcon color="primary" />
@@ -195,7 +273,7 @@ export default function Cart() {
                 variant="h6"
                 // onChange={settotal(total + quantities[index] * item.price)}
               >
-                {quantities[index] * item.price} ₹
+                {item.quantity * item.price} ₹
               </Typography>
             </Card>
           </Card>
@@ -205,7 +283,6 @@ export default function Cart() {
   };
 
   const fetchCart = () => {
-    //setquantities(new Array(cartItems.length).fill(1));
     const user_id = JSON.parse(localStorage.getItem("jwt")).userData.user_id;
     axios
       .get(`${API}/cart/${user_id}`, {
@@ -215,9 +292,8 @@ export default function Cart() {
         },
       })
       .then((response) => {
-        console.log(response.data.Items);
         setcartItems(response.data.Items);
-        //setquantities(new Array(cartItems.length).fill(1));
+        localStorage.setItem("qty", response.data.Items.length);
         localStorage.setItem("cart", JSON.stringify(response.data.Items));
       })
       .catch(function (error) {
@@ -288,8 +364,6 @@ export default function Cart() {
 
   const placeorder = () => {
     cartItems.map((item, index) => {
-      alert(quantities[index]);
-
       const body = {
         user_id: item.user_id,
         product_id: item.product_id,
@@ -297,7 +371,7 @@ export default function Cart() {
         desc: item.desc,
         price: item.price,
         image_path: item.image_path,
-        quantity: quantities[index],
+        quantity: item.quantity,
         cart_id: item.cart_id,
       };
       axios
@@ -311,7 +385,9 @@ export default function Cart() {
           toast.success(response.data.message, {
             position: toast.POSITION.TOP_CENTER,
           });
+
           fetchCart();
+          fetchallorders();
         })
         .catch(function (error) {
           console.log("responded");
@@ -342,14 +418,52 @@ export default function Cart() {
     });
   };
 
+  const fetchallorders = () => {
+    const StatusReq = "Pending";
+    axios
+      .get(`${API}/order/status/${StatusReq}`, {
+        headers: {
+          "x-access-token": localStorage.getItem("token"),
+        },
+      })
+      .then((response) => {
+        console.log(response.data);
+        localStorage.setItem("order", response.data.Orders.length);
+      })
+      .catch(function (error) {
+        console.log("responded");
+        if (error.response) {
+          // Request made and server responded
+          console.log(error.response.data);
+          toast.error(error.response.data.errorMessage, {
+            position: toast.POSITION.TOP_CENTER,
+          });
+          console.log(error.response.data.errorMessage);
+          console.log("status " + error.response.status);
+          console.log(error.response.headers);
+        } else if (error.request) {
+          // The request was made but no response was received
+          toast.error(error.request, {
+            position: toast.POSITION.TOP_CENTER,
+          });
+          console.log("err request  " + error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          toast.error(error.message, {
+            position: toast.POSITION.TOP_CENTER,
+          });
+          console.log("Error", error);
+        }
+        throw error;
+      });
+  };
   return (
     <div style={{ display: "flex", flexDirection: "row" }}>
-     
-      <Navbar/>
+      <Navbar />
       {cartItems.length > 0 && (
         <div
           style={{
-            margin : "150px auto",
+            margin: "150px auto",
             display: "flex",
             flexDirection: "column",
             // justifyContent : "center"
@@ -373,7 +487,7 @@ export default function Cart() {
           >
             <Typography component="div" variant="h6">
               {cartItems.reduce(
-                (total, item, index) => total + item.price * quantities[index],
+                (total, item, index) => total + item.price * item.quantity,
                 0
               )}
             </Typography>
@@ -390,8 +504,17 @@ export default function Cart() {
               marginTop: 10,
             }}
           >
-            <Button variant="contained" fullWidth onClick={placeorder} style ={{backgroundColor :  "#03B48C"}}>
-              <Typography component="div" variant="h6" style={{color : "#ffffff", fontWeight : "700"}}>
+            <Button
+              variant="contained"
+              fullWidth
+              onClick={placeorder}
+              style={{ backgroundColor: "#03B48C" }}
+            >
+              <Typography
+                component="div"
+                variant="h6"
+                style={{ color: "#ffffff", fontWeight: "700" }}
+              >
                 Place Order
               </Typography>
             </Button>
@@ -399,7 +522,7 @@ export default function Cart() {
         </div>
       )}
 
-      {cartItems.length == 0 && (
+      {cartItems.length === 0 && (
         <div
           style={{
             marginLeft: "250px",
