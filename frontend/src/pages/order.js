@@ -1,7 +1,4 @@
 import { React, useState, useEffect } from "react";
-import logo from "../assets/logo.jpg";
-import { signout } from "../helper/Auth";
-import ShoppingCartRoundedIcon from "@material-ui/icons/ShoppingCartRounded";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
@@ -12,7 +9,7 @@ import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import { API } from "../backend";
 import DeleteIcon from "@material-ui/icons/Delete";
-import Navbar from "../components/Navbar/navbar"
+import Navbar from "../components/Navbar/navbar";
 export default function Order() {
   const [orderList, setorderList] = useState([]);
 
@@ -64,44 +61,6 @@ export default function Order() {
   };
 
   const fetchallorders = () => {
-    // const user_id = JSON.parse(localStorage.getItem("jwt")).userData.user_id;
-    // axios
-    //   .get(`${API}/order/${user_id}`, {
-    //     headers: {
-    //       "x-access-token": localStorage.getItem("token"),
-    //     },
-    //   })
-    //   .then((response) => {
-    //     console.log(response.data.Orders);
-    //     setorderList(response.data.Orders);
-    //   })
-    //   .catch(function (error) {
-    //     console.log("responded");
-    //     if (error.response) {
-    //       // Request made and server responded
-    //       console.log(error.response.data);
-    //       toast.error(error.response.data.errorMessage, {
-    //         position: toast.POSITION.TOP_CENTER,
-    //       });
-    //       console.log(error.response.data.errorMessage);
-    //       console.log("status " + error.response.status);
-    //       console.log(error.response.headers);
-    //     } else if (error.request) {
-    //       // The request was made but no response was received
-    //       toast.error(error.request, {
-    //         position: toast.POSITION.TOP_CENTER,
-    //       });
-    //       console.log("err request  " + error.request);
-    //     } else {
-    //       // Something happened in setting up the request that triggered an Error
-    //       toast.error(error.message, {
-    //         position: toast.POSITION.TOP_CENTER,
-    //       });
-    //       console.log("Error", error);
-    //     }
-    //     throw error;
-    //   });
-
     const body = {
       user_id: JSON.parse(localStorage.getItem("jwt")).userData.user_id,
       status: "Pending",
@@ -202,8 +161,8 @@ export default function Order() {
               justifyContent: "center",
               alignItems: "center",
               marginLeft: "10px",
-              fontWeight : "700",
-              height : "50px"
+              fontWeight: "700",
+              height: "50px",
             }}
           >
             Product
@@ -216,7 +175,7 @@ export default function Order() {
               justifyContent: "center",
               alignItems: "center",
               marginLeft: "10px",
-              fontWeight : "700",
+              fontWeight: "700",
             }}
           >
             Name
@@ -229,7 +188,7 @@ export default function Order() {
               justifyContent: "center",
               alignItems: "center",
               marginLeft: "10px",
-              fontWeight : "700",
+              fontWeight: "700",
             }}
           >
             Total Price
@@ -242,7 +201,7 @@ export default function Order() {
               justifyContent: "center",
               alignItems: "center",
               marginLeft: "10px",
-              fontWeight : "700",
+              fontWeight: "700",
             }}
           >
             Status
@@ -255,7 +214,7 @@ export default function Order() {
               justifyContent: "center",
               alignItems: "center",
               marginLeft: "10px",
-              fontWeight : "700",
+              fontWeight: "700",
             }}
           >
             Action
@@ -317,7 +276,7 @@ export default function Order() {
             >
               {order.status}
             </Card>
-            {order.status == "Pending" && (
+            {order.status === "Pending" && (
               <Card
                 style={{
                   display: "flex",
@@ -337,7 +296,7 @@ export default function Order() {
                 </IconButton>
               </Card>
             )}
-            {order.status != "Pending" && (
+            {order.status !== "Pending" && (
               <Card
                 style={{
                   display: "flex",
@@ -366,7 +325,7 @@ export default function Order() {
 
   return (
     <div style={{ display: "flex", flexDirection: "row" }}>
-      <Navbar/>
+      <Navbar />
       <div
         style={{
           marginLeft: "50px",
@@ -405,7 +364,7 @@ export default function Order() {
           {renderOrder()}
         </div>
       )}
-      {orderList.length == 0 && (
+      {orderList.length === 0 && (
         <div
           style={{
             marginLeft: "150px",
@@ -414,7 +373,7 @@ export default function Order() {
             flexDirection: "column",
           }}
         >
-          <h1>Oh NO! Sorry No Orders</h1>
+          <h1>Oh NO! Sorry No Pending Orders</h1>
         </div>
       )}
     </div>

@@ -1,6 +1,5 @@
 import { React, useState, useEffect } from "react";
 import logo from "../../assets/logo.jpg";
-import Footer from "../../components/Navbar/footer";
 import "../../components/Navbar/navbar.scss";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
@@ -9,8 +8,10 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
 import Button from "@material-ui/core/Button";
 import { ToastContainer, toast } from "react-toastify";
-import { addproduct, getcategory } from "../../helper/owner";
+import { addproduct } from "../../helper/owner";
 import { signout } from "../../helper/Auth";
+import CircularProgress from "@mui/material/CircularProgress";
+import { useNavigate } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -33,6 +34,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Addproduct() {
+  const navigate = useNavigate();
   useEffect(() => {
     setcategorylist(JSON.parse(localStorage.getItem("categories")));
   }, []);
@@ -45,17 +47,17 @@ export default function Addproduct() {
     price: "",
     quantity: "",
     category_id: "",
+    loading: false,
   });
-  const [selectedcat, setselectedcat] = useState("chair");
   const [categorylist, setcategorylist] = useState([]);
-  const { name, desc, price, quantity, category_id } = values;
+  const { name, desc, price, quantity, category_id, loading } = values;
 
   const handleChange = (name) => (event) => {
     setvalues({ ...values, [name]: event.target.value });
   };
 
   const onSubmit = () => {
-    setvalues({ ...values });
+    setvalues({ ...values, loading: true });
     console.log("naane ne state inda");
     console.log(image, glbfile);
     addproduct(
@@ -77,14 +79,23 @@ export default function Addproduct() {
           price: "",
           quantity: "",
           category_id: "",
+          loading: false,
         });
-        // setimage(null);
         if (!data) {
           toast.error(data.error, {
             position: toast.POSITION.TOP_LEFT,
           });
-          setvalues({ ...values });
+          setvalues({ ...values, loading: false });
         } else {
+          setvalues({
+            name: "",
+            desc: "",
+            price: "",
+            quantity: "",
+            category_id: "",
+            loading: false,
+          });
+          navigate("/ownerhome");
           toast.success(data.data.message, {
             position: toast.POSITION.TOP_CENTER,
           });
@@ -92,6 +103,8 @@ export default function Addproduct() {
       })
       .catch((err) => {
         console.log(err);
+        setvalues({ ...values, loading: false });
+
         throw err;
       });
   };
@@ -100,27 +113,27 @@ export default function Addproduct() {
 
   return (
     <div style={{ display: "flex", flexDirection: "row" }}>
-    <header>
-    <div className="header-inner">
-      <img src={logo} alt="logo" />
-      <nav>
-        <ul>
-          <li>
-            <a href="/ownerhome">Products</a>
-          </li>
-          <li>
-            <a href="/addproduct">Add Products</a>
-          </li>
-          <li>
-            <a href="/owner/orders">Orders</a>
-          </li>
-          <li onClick={signout}>
-            <a href="/">Logout</a>
-          </li>
-        </ul>
-      </nav>
-    </div>
-  </header>
+      <header>
+        <div className="header-inner">
+          <img src={logo} alt="logo" />
+          <nav className="desktop-view">
+            <ul>
+              <li>
+                <a href="/ownerhome">Products</a>
+              </li>
+              <li>
+                <a href="/addproduct">Add Products</a>
+              </li>
+              <li>
+                <a href="/owner/orders">Orders</a>
+              </li>
+              <li onClick={signout}>
+                <a href="/">Logout</a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </header>
 
       <div
         style={{
@@ -219,9 +232,13 @@ export default function Addproduct() {
             </Button>
           </label>
 
-          <Button variant="contained" onClick={onSubmit}>
-            Add product
-          </Button>
+          {loading ? (
+            <CircularProgress />
+          ) : (
+            <Button variant="contained" onClick={onSubmit}>
+              Add product
+            </Button>
+          )}
         </form>
         <div
           style={{

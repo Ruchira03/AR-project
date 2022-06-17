@@ -11,7 +11,7 @@ import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import { authenticate, isAuthenticated, ownersignin } from "../../helper/Auth";
+import { authenticate, ownersignin } from "../../helper/Auth";
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import background from "../../assets/bg.webp";
@@ -56,8 +56,7 @@ export default function Ownerlogin() {
     didRedirict: false,
   });
   const navigate = useNavigate();
-  const { email, password, didRedirict } = values;
-  const { user } = isAuthenticated();
+  const { email, password } = values;
 
   const handleChange = (name) => (event) => {
     setvalues({ ...values, error: false, [name]: event.target.value });
@@ -74,9 +73,10 @@ export default function Ownerlogin() {
           });
           setvalues({ ...values, error: res.error });
         } else {
-          toast.success("sucess", {
+          toast.success(res.data, {
             position: toast.POSITION.TOP_CENTER,
           });
+          localStorage.setItem("owner", true);
           authenticate(res, () => {
             setvalues({ ...values, didRedirict: true });
             navigate("/ownerhome");
@@ -104,7 +104,7 @@ export default function Ownerlogin() {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <form className={classes.form} noValidate>
+        <form className={classes.form} noValidate onSubmit={onSubmit}>
           <TextField
             variant="outlined"
             margin="normal"
@@ -138,7 +138,6 @@ export default function Ownerlogin() {
             fullWidth
             variant="contained"
             color="primary"
-            onClick={onSubmit}
             className={classes.submit}
           >
             Sign In

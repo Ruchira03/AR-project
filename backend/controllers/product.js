@@ -57,7 +57,7 @@ exports.addProduct = (req, res, next) => {
               image_path: image_url,
               quantity: req.body.quantity,
               category_id: req.body.category_id,
-              rating : 0
+              rating: 0,
             });
 
             console.log(product);
@@ -134,4 +134,18 @@ exports.deleteProduct = (req, res, next) => {
       res.status(200).send({ message: "Product Deleted" });
     }
   });
+};
+
+exports.getProductDetails = (req, res, next) => {
+  {
+    Product.findOne({ product_id: req.params.product_id }).exec(
+      (err, productDetails) => {
+        if (err) {
+          next(new ErrorResponse(err, 500));
+        } else {
+          res.status(200).send({ productDetails: productDetails });
+        }
+      }
+    );
+  }
 };

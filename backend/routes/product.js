@@ -22,4 +22,10 @@ router.put("/product/edit", authJWT.verifyToken, controller.editProduct);
 
 router.delete("/product/delete", authJWT.verifyToken, controller.deleteProduct);
 
+router.get(
+  "/product/:product_id",
+  authJWT.verifyToken,
+  controller.getProductDetails
+);
+
 module.exports = router;

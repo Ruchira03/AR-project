@@ -72,9 +72,8 @@ export default function SignIn() {
 
   const onSubmit = (event) => {
     event.preventDefault();
-    setvalues({ ...values });
 
-    console.log(mobile_number);
+    setvalues({ ...values });
     signup({
       name,
       email,
@@ -86,7 +85,7 @@ export default function SignIn() {
 
         if (!data) {
           toast.error(data.error, {
-            position: toast.POSITION.TOP_LEFT,
+            position: toast.POSITION.TOP_CENTER,
           });
           setvalues({ ...values });
         } else {
@@ -96,6 +95,9 @@ export default function SignIn() {
         }
       })
       .catch((err) => {
+        toast.success(err, {
+          position: toast.POSITION.TOP_CENTER,
+        });
         console.log(err);
       });
   };
@@ -111,17 +113,25 @@ export default function SignIn() {
       otp,
     })
       .then((res) => {
-        if (res.error) {
+        console.log(res);
+        if (!res) {
+          toast("something went wrong", {
+            position: toast.POSITION.TOP_CENTER,
+          });
+          setvalues({ ...values });
+        } else if (res.error) {
           setvalues({ ...values, error: res.error });
-          toast(res.error, { position: toast.TOP_CENTER });
+          toast(res.message, { position: toast.TOP_CENTER });
         } else {
+          localStorage.setItem("owner", false);
           authenticate(res.data, () => {
             setvalues({ ...values, didRedirict: true });
           });
         }
       })
       .catch((err) => {
-        alert(err);
+        //alert(err.message);
+        toast(err.message, { position: toast.TOP_CENTER });
       });
   };
 
@@ -145,7 +155,7 @@ export default function SignIn() {
           <Typography component="h1" variant="h5">
             Sign Up
           </Typography>
-          <form className={classes.form} noValidate>
+          <form className={classes.form} onSubmit={onSubmit}>
             <TextField
               onChange={handleChange("name")}
               autoComplete="name"
@@ -205,7 +215,6 @@ export default function SignIn() {
             <Button
               type="submit"
               fullWidth
-              onClick={onSubmit}
               variant="contained"
               color="primary"
               className={classes.submit}
@@ -213,7 +222,9 @@ export default function SignIn() {
             >
               Get OTP
             </Button>
-
+          </form>
+          <form className={classes.form} onSubmit={otpverify}>
+            {" "}
             <TextField
               variant="outlined"
               margin="normal"
@@ -228,7 +239,6 @@ export default function SignIn() {
             <Button
               type="submit"
               fullWidth
-              onClick={otpverify}
               variant="contained"
               color="primary"
               className={classes.submit}
