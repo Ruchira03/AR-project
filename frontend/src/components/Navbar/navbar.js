@@ -35,6 +35,9 @@ export default function Navbar() {
               </a>
             </li>
             <li>
+              <a href="/wishlist">Wishlist</a>
+            </li>
+            <li>
               <a href="/orders">Orders</a>
               <Badge badgeContent={order} color="primary">
                 <ShoppingBagIcon />

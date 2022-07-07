@@ -45,7 +45,7 @@ exports.addProduct = (req, res, next) => {
 
         getDownloadURL(imageRef).then((image_url) => {
           console.log(image_url);
-
+          console.log(req.body.discount);
           getDownloadURL(glbRef).then((glb_url) => {
             console.log(glb_url);
             const product = new Product({
@@ -58,7 +58,7 @@ exports.addProduct = (req, res, next) => {
               quantity: req.body.quantity,
               category_id: req.body.category_id,
               rating: 0,
-              discount : req.body.discount
+              discount: req.body.discount,
             });
 
             console.log(product);
@@ -116,7 +116,7 @@ exports.editProduct = (req, res, next) => {
       price: req.body.price,
       quantity: req.body.quantity,
       category_id: req.body.category_id,
-      discount : req.body.discount
+      discount: req.body.discount,
     },
     { upsert: true }
   ).exec((err, result) => {

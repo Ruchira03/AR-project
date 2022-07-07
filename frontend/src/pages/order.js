@@ -149,7 +149,7 @@ export default function Order() {
   const renderOrder = () => {
     return (
       <div>
-        <Card style={{ display: "flex", width: 900, marginTop: 10 }}>
+        <Card style={{ display: "flex", width: 1100, marginTop: 10 }}>
           <Card
             style={{
               width: 250,
@@ -166,7 +166,7 @@ export default function Order() {
           </Card>
           <Card
             style={{
-              width: 300,
+              width: 250,
               display: "flex",
               flexDirection: "column",
               justifyContent: "center",
@@ -175,7 +175,33 @@ export default function Order() {
               fontWeight: "700",
             }}
           >
-            Name
+            Product Name
+          </Card>
+          <Card
+            style={{
+              width: 250,
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              marginLeft: "10px",
+              fontWeight: "700",
+            }}
+          >
+            Product Price
+          </Card>
+          <Card
+            style={{
+              width: 250,
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              marginLeft: "10px",
+              fontWeight: "700",
+            }}
+          >
+            Quantity
           </Card>
           <Card
             style={{
@@ -218,7 +244,7 @@ export default function Order() {
           </Card>
         </Card>
         {orderList.map((order, idx) => (
-          <Card style={{ display: "flex", width: 900, marginTop: 10 }}>
+          <Card style={{ display: "flex", width: 1100, marginTop: 10 }}>
             <Card
               style={{
                 width: 250,
@@ -239,7 +265,7 @@ export default function Order() {
             </Card>
             <Card
               style={{
-                width: 300,
+                width: 250,
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "center",
@@ -248,6 +274,30 @@ export default function Order() {
               }}
             >
               {order.name}
+            </Card>
+            <Card
+              style={{
+                width: 250,
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                marginLeft: "10px",
+              }}
+            >
+              {order.price}
+            </Card>
+            <Card
+              style={{
+                width: 250,
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                marginLeft: "10px",
+              }}
+            >
+              {order.quantity}
             </Card>
             <Card
               style={{
@@ -352,7 +402,7 @@ export default function Order() {
       {orderList.length > 0 && (
         <div
           style={{
-            marginLeft: "150px",
+            marginLeft: "80px",
             marginTop: "150px",
             display: "flex",
             flexDirection: "column",

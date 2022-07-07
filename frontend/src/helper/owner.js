@@ -3,22 +3,16 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 export const addproduct = (product, image, glbfile) => {
-  console.log(image,glbfile);
+  console.log(image, glbfile);
   const formData = new FormData();
   formData.append("name", product.name);
   formData.append("desc", product.desc);
   formData.append("price", product.price);
   formData.append("quantity", product.quantity);
+  formData.append("discount", product.discount);
   formData.append("category_id", product.category_id);
-  // formData.append("folder_name", product.foldername);
   formData.append("image", image);
   formData.append("glb", glbfile);
-  // formData.append("bin", binfile);
-  // var ins = folder.length;
-  // for (var x = 0; x < ins; x++) {
-  //   formData.append("folder", folder[x]);
-  // }
-
   console.log(formData);
   return axios
     .post(
@@ -74,6 +68,7 @@ export const editproduct = (product) => {
   formData.append("quantity", product.quantity);
   formData.append("category_id", product.category_id);
   formData.append("product_id", product.product_id);
+  formData.append("discount", product.discount);
 
   return axios
     .put(

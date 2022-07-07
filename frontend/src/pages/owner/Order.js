@@ -201,7 +201,7 @@ export default function OwnerOrder() {
   const renderOrder = () => {
     return (
       <div>
-        <Card style={{ display: "flex", width: 900, marginTop: 10 }}>
+        <Card style={{ display: "flex", width: 1200, marginTop: 10 }}>
           <Card
             style={{
               width: 250,
@@ -216,7 +216,19 @@ export default function OwnerOrder() {
           </Card>
           <Card
             style={{
-              width: 300,
+              width: 250,
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              marginLeft: "10px",
+            }}
+          >
+            User Name
+          </Card>
+          <Card
+            style={{
+              width: 250,
               display: "flex",
               flexDirection: "column",
               justifyContent: "center",
@@ -225,6 +237,30 @@ export default function OwnerOrder() {
             }}
           >
             Product Name
+          </Card>
+          <Card
+            style={{
+              width: 250,
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              marginLeft: "10px",
+            }}
+          >
+            Product Price
+          </Card>
+          <Card
+            style={{
+              width: 250,
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              marginLeft: "10px",
+            }}
+          >
+            Quantity
           </Card>
           <Card
             style={{
@@ -240,7 +276,7 @@ export default function OwnerOrder() {
           </Card>
           <Card
             style={{
-              width: 200,
+              width: 250,
               display: "flex",
               flexDirection: "row",
               justifyContent: "center",
@@ -264,7 +300,7 @@ export default function OwnerOrder() {
           </Card>
         </Card>
         {orderList.map((order, idx) => (
-          <Card style={{ display: "flex", width: 900, marginTop: 10 }}>
+          <Card style={{ display: "flex", width: 1200, marginTop: 10 }}>
             <Card
               style={{
                 width: 250,
@@ -285,7 +321,19 @@ export default function OwnerOrder() {
             </Card>
             <Card
               style={{
-                width: 300,
+                width: 250,
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                marginLeft: "10px",
+              }}
+            >
+              {order.user_name}
+            </Card>
+            <Card
+              style={{
+                width: 250,
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "center",
@@ -294,6 +342,30 @@ export default function OwnerOrder() {
               }}
             >
               {order.name}
+            </Card>
+            <Card
+              style={{
+                width: 250,
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                marginLeft: "10px",
+              }}
+            >
+              {order.price}
+            </Card>
+            <Card
+              style={{
+                width: 250,
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center",
+                marginLeft: "10px",
+              }}
+            >
+              {order.quantity}
             </Card>
             <Card
               style={{
@@ -418,7 +490,7 @@ export default function OwnerOrder() {
       {orderList.length > 0 && (
         <div
           style={{
-            marginLeft: "150px",
+            marginLeft: "25px",
             marginTop: "150px",
             display: "flex",
             flexDirection: "column",
