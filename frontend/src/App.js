@@ -13,9 +13,10 @@ import Editproduct from "./pages/owner/editproduct";
 import ProductDisplay from "./pages/Product_display";
 import Cart from "./pages/cart";
 import Order from "./pages/order";
+import Wishlist from "./pages/wishlist";
 import Ownerorder from "./pages/owner/Order";
+
 function App() {
- 
   return (
     <BrowserRouter>
       <Routes>
@@ -30,6 +31,7 @@ function App() {
           <Route path="/editproduct" element={<Editproduct />} />
           <Route path="/productdisplay" element={<ProductDisplay />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/wishlist" element={<Wishlist />} />
           <Route path="/orders" element={<Order />} />
           <Route path="/owner/orders" element={<Ownerorder />} />
         </>

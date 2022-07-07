@@ -45,6 +45,7 @@ export default function Addproduct() {
       quantity: val.quantity,
       category_id: val.category_id,
       product_id: val.product_id,
+      discount: val.discount,
     });
   }, []);
   const navigate = useNavigate();
@@ -56,9 +57,11 @@ export default function Addproduct() {
     quantity: "",
     category_id: "",
     product_id: "",
+    discount: "",
   });
   const [categorylist, setcategorylist] = useState([]);
-  const { name, desc, price, quantity, category_id, product_id } = values;
+  const { name, desc, price, quantity, category_id, product_id, discount } =
+    values;
 
   const handleChange = (name) => (event) => {
     setvalues({ ...values, [name]: event.target.value });
@@ -73,6 +76,7 @@ export default function Addproduct() {
       quantity,
       category_id,
       product_id,
+      discount,
     })
       .then((data) => {
         setvalues({
@@ -158,6 +162,15 @@ export default function Addproduct() {
             variant="outlined"
             value={desc}
             onChange={handleChange("desc")}
+          />
+          <TextField
+            type="number"
+            id="standard-textarea outlined-basic"
+            label="product discount"
+            placeholder="discount"
+            variant="outlined"
+            value={discount}
+            onChange={handleChange("discount")}
           />
           <TextField
             type="number"

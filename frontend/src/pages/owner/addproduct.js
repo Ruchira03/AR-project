@@ -47,10 +47,12 @@ export default function Addproduct() {
     price: "",
     quantity: "",
     category_id: "",
+    discount: "",
     loading: false,
   });
   const [categorylist, setcategorylist] = useState([]);
-  const { name, desc, price, quantity, category_id, loading } = values;
+  const { name, desc, price, quantity, category_id, loading, discount } =
+    values;
 
   const handleChange = (name) => (event) => {
     setvalues({ ...values, [name]: event.target.value });
@@ -65,6 +67,7 @@ export default function Addproduct() {
         price,
         quantity,
         category_id,
+        discount,
       },
       image,
       glbfile
@@ -76,6 +79,7 @@ export default function Addproduct() {
           price: "",
           quantity: "",
           category_id: "",
+          discount: "",
           loading: false,
         });
         if (!data) {
@@ -90,6 +94,7 @@ export default function Addproduct() {
             price: "",
             quantity: "",
             category_id: "",
+            discount: "",
             loading: false,
           });
           navigate("/ownerhome");
@@ -166,6 +171,15 @@ export default function Addproduct() {
             variant="outlined"
             value={desc}
             onChange={handleChange("desc")}
+          />
+          <TextField
+            type="number"
+            id="standard-textarea outlined-basic"
+            label="product discount"
+            placeholder="discount"
+            variant="outlined"
+            value={discount}
+            onChange={handleChange("discount")}
           />
           <TextField
             type="number"

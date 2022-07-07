@@ -100,7 +100,6 @@ export default function Homepage() {
         },
       })
       .then((response) => {
-
         toast.success(response.data.message, {
           position: toast.POSITION.TOP_CENTER,
         });
@@ -400,18 +399,24 @@ export default function Homepage() {
                           {prod.name}
                         </Typography>
                         <Typography
-                          variant="body2"
+                          gutterBottom
+                          variant="h6"
                           color="textSecondary"
-                          component="p"
+                          component="h3"
                         >
-                          {prod.price}
+                          {prod.discount}% Flat Discount
+                        </Typography>
+                        <Typography gutterBottom variant="h5" component="h2">
+                          Price : <s>{prod.price} </s>&nbsp;&nbsp;
+                          {prod.price - (prod.price * prod.discount) / 100}₹
                         </Typography>
                         <Typography
-                          variant="body2"
+                          gutterBottom
+                          variant="h6"
                           color="textSecondary"
-                          component="p"
+                          component="h1"
                         >
-                          availability : {prod.quantity}
+                          Quantity : {prod.quantity}
                         </Typography>
                       </CardContent>
                     </CardActionArea>

@@ -21,6 +21,9 @@ import Box from "@material-ui/core/Box";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar/navbar";
 import Rating from "@mui/material/Rating";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import { pink } from "@mui/material/colors";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -36,10 +39,12 @@ function Products() {
   const [productlist, setproductlist] = useState([]);
   const [categorylist, setcategorylist] = useState([]);
   const [CartItems, setcartItems] = useState([]);
+  const [wishlistitems, setwishlistitems] = useState([]);
   useEffect(() => {
     fetchdetails();
     getcategory();
     fetchCart();
+    fetchWishlist();
   }, []);
   const classes = useStyles();
 
@@ -262,6 +267,14 @@ function Products() {
     if (choice === 8) {
       fetchdetails();
     }
+    if (choice === 9) {
+      const list = [...productlist].sort((a, b) => a.discount - b.discount);
+      setproductlist(list);
+    }
+    if (choice === 10) {
+      const list = [...productlist].sort((a, b) => b.discount - a.discount);
+      setproductlist(list);
+    }
   };
 
   const display = (product) => {
@@ -331,6 +344,96 @@ function Products() {
     return result;
   };
 
+  const isItemInTheWishlist = (item) => {
+    var result = false;
+    wishlistitems.map((product) => {
+      if (product.product_id === item.product_id) {
+        result = true;
+      }
+    });
+    return result;
+  };
+
+  const wishlist = (product) => {
+    const body = {
+      product_id: product.product_id,
+      product_name: product.name,
+      desc: product.desc,
+      price: product.price,
+      image_path: product.image_path,
+    };
+    axios
+      .post(`${API}/wishlist/add`, body, {
+        headers: {
+          "x-access-token": localStorage.getItem("token"),
+        },
+      })
+      .then((response) => {
+        console.log(response);
+        toast.success(response.data.message, {
+          position: toast.POSITION.TOP_CENTER,
+        });
+        fetchWishlist();
+      })
+      .catch(function (error) {
+        console.log("responded");
+        if (error.response) {
+          // Request made and server responded
+          console.log(error.response.data);
+          toast.error(error.response.data.errorMessage, {
+            position: toast.POSITION.TOP_CENTER,
+          });
+          console.log(error.response.data.errorMessage);
+          console.log("status " + error.response.status);
+          console.log(error.response.headers);
+        } else if (error.request) {
+          // The request was made but no response was received
+          toast.error(error.request, {
+            position: toast.POSITION.TOP_CENTER,
+          });
+          console.log("err request  " + error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          toast.error(error.message, {
+            position: toast.POSITION.TOP_CENTER,
+          });
+          console.log("Error", error);
+        }
+        throw error;
+      });
+  };
+
+  const fetchWishlist = () => {
+    axios
+      .get(`${API}/wishlist`, {
+        headers: {
+          "x-access-token": localStorage.getItem("token"),
+          "content-type": "multipart/form-data",
+        },
+      })
+      .then((response) => {
+        setwishlistitems(response.data.Items);
+      })
+      .catch(function (error) {
+        console.log("responded");
+        if (error.response) {
+          console.log(error.response.data);
+          console.log(error.response.data.errorMessage);
+          console.log("status " + error.response.status);
+          console.log(error.response.headers);
+        } else if (error.request) {
+          // The request was made but no response was received
+
+          console.log("err request  " + error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+
+          console.log("Error", error);
+        }
+        throw error;
+      });
+  };
+
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
       <Navbar />
@@ -387,6 +490,9 @@ function Products() {
               <label>rating</label>
               <MenuItem value={6}>lowest to highest</MenuItem>
               <MenuItem value={7}>highest to lowest</MenuItem>
+              <label>Discount</label>
+              <MenuItem value={9}>lowest to highest</MenuItem>
+              <MenuItem value={10}>highest to lowest</MenuItem>
               <MenuItem value={8}>No Sort</MenuItem>
             </Select>
           </FormControl>
@@ -423,22 +529,28 @@ function Products() {
                         alt=""
                       />
                       <CardContent style={{ width: 350 }}>
-                        <Typography gutterBottom variant="h6" component="h6">
+                        <Typography gutterBottom variant="h5" component="h2">
                           {prod.name}
                         </Typography>
                         <Typography
-                          variant="body2"
+                          gutterBottom
+                          variant="h6"
                           color="textSecondary"
-                          component="p"
+                          component="h3"
                         >
-                          ₹ {prod.price}
+                          {prod.discount}% Flat Discount
+                        </Typography>
+                        <Typography gutterBottom variant="h5" component="h2">
+                          Price : <s>{prod.price} </s>&nbsp;&nbsp;
+                          {prod.price - (prod.price * prod.discount) / 100}₹
                         </Typography>
                         <Typography
-                          variant="body2"
+                          gutterBottom
+                          variant="h6"
                           color="textSecondary"
-                          component="p"
+                          component="h1"
                         >
-                          Available Quantity : {prod.quantity}
+                          Quantity : {prod.quantity}
                         </Typography>
                         <label htmlFor="Rating">{prod.rating}</label>
                         <Typography
@@ -457,7 +569,7 @@ function Products() {
                     </CardActionArea>
                     <CardActions>
                       {prod.quantity === 0 ? (
-                        <h1>sorry out of stock</h1>
+                        <Button>sorry out of stock</Button>
                       ) : isItemInTheCart(prod) ? (
                         <Button
                           fullWidth
@@ -485,6 +597,17 @@ function Products() {
                         >
                           Add to Cart
                         </Button>
+                      )}
+                      {isItemInTheWishlist(prod) ? (
+                        <div>
+                          <FavoriteIcon sx={{ color: pink[500] }} />
+                        </div>
+                      ) : (
+                        <FavoriteBorderIcon
+                          onClick={() => {
+                            wishlist(prod);
+                          }}
+                        />
                       )}
                     </CardActions>
                   </Card>
