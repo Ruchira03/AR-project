@@ -10,7 +10,8 @@ const orderSchema = new mongoose.Schema({
     price: Number,
     image_path: String,
     quantity: Number,
-    status: String
+    status: String,
+    user_name : String
 })
 
 const Order = mongoose.models.orders || mongoose.model('orders', orderSchema);

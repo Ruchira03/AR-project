@@ -17,6 +17,7 @@ exports.placeOrder = (req, res, next) => {
     image_path: req.body.image_path,
     quantity: req.body.quantity,
     status: "Pending",
+    user_name : req.userName
   });
 
   order.save((err, order) => {

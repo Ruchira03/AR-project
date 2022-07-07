@@ -9,7 +9,8 @@ const productSchema = new mongoose.Schema({
     image_path : String,
     quantity : Number,
     category_id : String,
-    rating : Number
+    rating : Number,
+    discount : Number
 })
 
 const Product = mongoose.models.products || mongoose.model('products', productSchema);
