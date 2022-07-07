@@ -14,6 +14,7 @@ exports.addToCart = (req, res, next) => {
     price: req.body.price,
     image_path: req.body.image_path,
     quantity: req.body.quantity,
+    user_name : req.userName
   });
 
   cart.save((err, cart) => {

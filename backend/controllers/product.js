@@ -58,6 +58,7 @@ exports.addProduct = (req, res, next) => {
               quantity: req.body.quantity,
               category_id: req.body.category_id,
               rating: 0,
+              discount : req.body.discount
             });
 
             console.log(product);
@@ -115,6 +116,7 @@ exports.editProduct = (req, res, next) => {
       price: req.body.price,
       quantity: req.body.quantity,
       category_id: req.body.category_id,
+      discount : req.body.discount
     },
     { upsert: true }
   ).exec((err, result) => {
